@@ -1,2 +1,2 @@
 # band
-Go framework for building micro-services.
+Go Library for building micro-services.
