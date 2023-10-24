@@ -15,11 +15,13 @@ require (
 	github.com/redis/go-redis/v9 v9.1.0
 	github.com/spf13/cobra v1.7.0
 	go.etcd.io/etcd/client/v3 v3.5.9
-	google.golang.org/grpc v1.58.1
+	google.golang.org/grpc v1.56.2
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1
 	gorm.io/driver/postgres v1.5.2
 	gorm.io/gorm v1.25.4
 )
+
+replace google.golang.org/grpc => google.golang.org/grpc v1.41.1
 
 require (
 	github.com/alibabacloud-go/alibabacloud-gateway-spi v0.0.4 // indirect
