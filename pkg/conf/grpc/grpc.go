@@ -13,6 +13,7 @@ import (
 )
 
 type GrpcClient struct {
+	Conf Conf
 	Conn *grpc.ClientConn
 }
 
@@ -40,6 +41,7 @@ func NewGrpcClient(conf Conf) *GrpcClient {
 	}
 	log.Println("connected to ", rawURL)
 	return &GrpcClient{
+		Conf: conf,
 		Conn: conn,
 	}
 }

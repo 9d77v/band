@@ -3,6 +3,7 @@ package minio
 import (
 	"context"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"net/url"
@@ -63,6 +64,15 @@ func (m *Minio) PresignedGetURL(ctx context.Context, objectName string, expires 
 		return "", err
 	}
 	return u.String(), err
+}
+
+func (m *Minio) PutObject(ctx context.Context, objectName string, reader io.Reader, objectSize int64, contentType string) error {
+	_, err := m.client.PutObject(ctx, m.conf.BucketName, objectName, reader, objectSize, minio.PutObjectOptions{ContentType: contentType})
+	return err
+}
+
+func (m *Minio) GetObject(ctx context.Context, objectName string) (io.Reader, error) {
+	return m.client.GetObject(ctx, m.conf.BucketName, objectName, minio.GetObjectOptions{})
 }
 
 func (m *Minio) StatObject(ctx context.Context, objectName string) (ossconf.ObjectInfo, error) {

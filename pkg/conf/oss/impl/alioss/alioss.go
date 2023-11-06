@@ -1,8 +1,10 @@
 package alioss
 
 import (
+	"bytes"
 	"context"
 	"fmt"
+	"io"
 	"log"
 	"strconv"
 	"time"
@@ -41,6 +43,24 @@ func (m *OSS) PresignedPutURL(ctx context.Context, objectName string, expires ti
 
 func (m *OSS) PresignedGetURL(ctx context.Context, objectName string, expires time.Duration) (string, error) {
 	return m.client.SignURL(objectName, ossSDK.HTTPGet, int64(expires.Seconds()))
+}
+
+func (m *OSS) PutObject(ctx context.Context, objectName string, reader io.Reader, objectSize int64, contentType string) error {
+	return m.client.PutObject(objectName, reader)
+}
+
+func (m *OSS) GetObject(ctx context.Context, objectName string) (io.Reader, error) {
+	body, err := m.client.GetObject(objectName)
+	if err != nil {
+		return nil, err
+	}
+
+	data, err := io.ReadAll(body)
+	body.Close()
+	if err != nil {
+		return nil, err
+	}
+	return bytes.NewReader(data), nil
 }
 
 func (m *OSS) StatObject(ctx context.Context, objectName string) (ossconf.ObjectInfo, error) {
