@@ -71,8 +71,14 @@ func (m *Minio) PutObject(ctx context.Context, objectName string, reader io.Read
 	return err
 }
 
-func (m *Minio) GetObject(ctx context.Context, objectName string) (io.Reader, error) {
-	return m.client.GetObject(ctx, m.conf.BucketName, objectName, minio.GetObjectOptions{})
+func (m *Minio) GetObject(ctx context.Context, objectName string, opts ossconf.GetObjectOption) (io.Reader, error) {
+	options := minio.GetObjectOptions{}
+	bytesRange := opts.GetRange()
+	if bytesRange != nil {
+		err := options.SetRange(bytesRange.Start, bytesRange.End)
+		log.Println("set range failed", err)
+	}
+	return m.client.GetObject(ctx, m.conf.BucketName, objectName, options)
 }
 
 func (m *Minio) StatObject(ctx context.Context, objectName string) (ossconf.ObjectInfo, error) {

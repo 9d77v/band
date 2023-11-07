@@ -18,7 +18,7 @@ type Oss interface {
 	PutObject(ctx context.Context, objectName string, reader io.Reader, objectSize int64, contentType string) error
 	GetBucketName() string
 	GetObjectName(prefix, fileName string) string
-	GetObject(ctx context.Context, objectName string) (io.Reader, error)
+	GetObject(ctx context.Context, objectName string, opts ossconf.GetObjectOption) (io.Reader, error)
 	GetStoragePath(prefix, fileName string) string
 }
 

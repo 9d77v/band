@@ -49,8 +49,14 @@ func (m *OSS) PutObject(ctx context.Context, objectName string, reader io.Reader
 	return m.client.PutObject(objectName, reader)
 }
 
-func (m *OSS) GetObject(ctx context.Context, objectName string) (io.Reader, error) {
-	body, err := m.client.GetObject(objectName)
+func (m *OSS) GetObject(ctx context.Context, objectName string, opts ossconf.GetObjectOption) (io.Reader, error) {
+	ossOptions := []ossSDK.Option{}
+	bytesRange := opts.GetRange()
+	if bytesRange != nil {
+		ossOptions = append(ossOptions,
+			ossSDK.Range(bytesRange.Start, bytesRange.End))
+	}
+	body, err := m.client.GetObject(objectName, ossOptions...)
 	if err != nil {
 		return nil, err
 	}
