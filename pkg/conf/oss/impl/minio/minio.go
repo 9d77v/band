@@ -92,10 +92,3 @@ func (m *Minio) GetBucketName() string {
 	return m.conf.BucketName
 }
 
-func (m *Minio) GetObjectName(prefix, fileName string) string {
-	return fmt.Sprintf("%s/%s", prefix, fileName)
-}
-
-func (m *Minio) GetStoragePath(prefix, fileName string) string {
-	return fmt.Sprintf("/%s/%s", m.conf.BucketName, m.GetObjectName(prefix, fileName))
-}

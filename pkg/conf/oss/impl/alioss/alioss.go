@@ -80,11 +80,3 @@ func (m *OSS) StatObject(ctx context.Context, objectName string) (ossconf.Object
 func (m *OSS) GetBucketName() string {
 	return m.conf.BucketName
 }
-
-func (m *OSS) GetObjectName(prefix, fileName string) string {
-	return fmt.Sprintf("%s/%s", prefix, fileName)
-}
-
-func (m *OSS) GetStoragePath(prefix, fileName string) string {
-	return fmt.Sprintf("/%s/%s", m.conf.BucketName, m.GetObjectName(prefix, fileName))
-}
