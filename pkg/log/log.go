@@ -10,6 +10,8 @@ import (
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
+var Logger *slog.Logger
+
 func Init() {
 	conf := FromEnv()
 	var level slog.Level
@@ -28,7 +30,8 @@ func Init() {
 	}
 	writers := []io.Writer{writer, os.Stdout}
 	fileAndStdoutWriter := io.MultiWriter(writers...)
-	slog.SetDefault(slog.New(slog.NewJSONHandler(fileAndStdoutWriter, &slog.HandlerOptions{
+	Logger = slog.New(slog.NewJSONHandler(fileAndStdoutWriter, &slog.HandlerOptions{
 		Level: level,
-	})))
+	}))
+	slog.SetDefault(Logger)
 }
