@@ -9,13 +9,14 @@ import (
 )
 
 type SearchField struct {
-	TermFields  []TermField
-	FuzzyFields []FuzzyField
-	LTEFields   []LTEField
-	LTFields    []LTField
-	GTEFields   []GTEField
-	GTFields    []GTField
-	JSONField   JSONField
+	TermFields    []TermField
+	FuzzyFields   []FuzzyField
+	LTEFields     []LTEField
+	LTFields      []LTField
+	GTEFields     []GTEField
+	GTFields      []GTField
+	JSONField     JSONField
+	NotMullFields []NotNullField
 }
 
 // SearchCriteria 搜索条件
@@ -24,11 +25,12 @@ type SearchCriteria struct {
 	Columns string
 	Table   string
 	SearchField
-	Joins       []string
-	Order       string
-	Group       string
-	OrFuzzys    []OrFuzzyField
-	NoPageQuery bool
+	Joins          []string
+	Order          string
+	Group          string
+	OrFuzzys       []OrFuzzyField
+	NoPageQuery    bool
+	ContainsDelete bool
 }
 
 type OrFuzzyField struct {
@@ -78,6 +80,9 @@ func (sc *SearchCriteria) WithKeyword(names []string, keyword string) *SearchCri
 }
 
 func (sc *SearchCriteria) BuildDB(db *gorm.DB) *gorm.DB {
+	if sc.ContainsDelete {
+		db = db.Unscoped()
+	}
 	if sc.Columns != "" {
 		db = db.Select(sc.Columns)
 	}
@@ -103,6 +108,9 @@ func (sc *SearchCriteria) BuildDB(db *gorm.DB) *gorm.DB {
 		} else if len(v.Value) > 1 {
 			db = db.Where(fmt.Sprintf("%s in ?", v.Name), v.Value)
 		}
+	}
+	for _, v := range sc.NotMullFields {
+		db = db.Where(fmt.Sprintf("%s is not null", v.Name))
 	}
 	for _, v := range sc.LTEFields {
 		db = db.Where(fmt.Sprintf("%s <= ?", v.Name), v.Value)

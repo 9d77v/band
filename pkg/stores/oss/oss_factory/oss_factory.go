@@ -31,7 +31,7 @@ func NewOss(conf oss.Conf) oss.Oss {
 	return client
 }
 
-func OssSigleton(conf oss.Conf) oss.Oss {
+func OssSingleton(conf oss.Conf) oss.Oss {
 	once.Do(func() {
 		client = NewOss(conf)
 	})

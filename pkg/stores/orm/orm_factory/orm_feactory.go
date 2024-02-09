@@ -26,7 +26,7 @@ func NewOrm(conf orm.Conf) (orm.DB, error) {
 	return client, err
 }
 
-func OrmSigleton(conf orm.Conf) (orm.DB, error) {
+func OrmSingleton(conf orm.Conf) (orm.DB, error) {
 	var err error
 	once.Do(func() {
 		client, err = NewOrm(conf)
