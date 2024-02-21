@@ -11,7 +11,7 @@ type Conf struct {
 
 func FromEnv() Conf {
 	return Conf{
-		Type:     env.String("CACHE_TYPE", "LOCAL"),
+		Type:     env.String("CACHE_TYPE", "local"),
 		Addrs:    env.StringArray("CACHE_ADDRESS", ",", "localhost:6379"),
 		Password: env.String("CACHE_PASSWORD"),
 		DB:       env.Int("CACHE_DB"),

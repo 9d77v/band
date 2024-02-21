@@ -80,3 +80,7 @@ func (m *OSS) StatObject(ctx context.Context, objectName string) (oss.ObjectInfo
 func (m *OSS) GetBucketName() string {
 	return m.conf.BucketName
 }
+
+func (m *OSS) DeleteObject(ctx context.Context, objectName string) error {
+	return m.client.DeleteObject(objectName)
+}

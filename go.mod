@@ -22,6 +22,11 @@ require (
 	gorm.io/gorm v1.25.4
 )
 
+require (
+	github.com/google/go-cmp v0.6.0 // indirect
+	github.com/stretchr/testify v1.8.4 // indirect
+)
+
 replace google.golang.org/grpc => google.golang.org/grpc v1.41.1
 
 require (
@@ -73,7 +78,7 @@ require (
 	go.uber.org/zap v1.17.0 // indirect
 	golang.org/x/crypto v0.12.0 // indirect
 	golang.org/x/net v0.14.0 // indirect
-	golang.org/x/sys v0.11.0 // indirect
+	golang.org/x/sys v0.14.0 // indirect
 	golang.org/x/text v0.12.0 // indirect
 	golang.org/x/time v0.3.0 // indirect
 	google.golang.org/genproto v0.0.0-20230711160842-782d3b101e98 // indirect

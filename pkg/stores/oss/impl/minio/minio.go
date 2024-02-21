@@ -91,3 +91,7 @@ func (m *Minio) StatObject(ctx context.Context, objectName string) (oss.ObjectIn
 func (m *Minio) GetBucketName() string {
 	return m.conf.BucketName
 }
+
+func (m *Minio) DeleteObject(ctx context.Context, objectName string) error {
+	return m.client.RemoveObject(ctx, m.conf.BucketName, objectName, minio.RemoveObjectOptions{})
+}
