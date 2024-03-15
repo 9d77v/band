@@ -11,6 +11,7 @@ type Conf struct {
 	ServerHost  string `yaml:"server_host"`
 	ServerPort  uint64 `yaml:"server_port"`
 	EtcdAddress string `yaml:"etcd_address"`
+	MaxConns    int    `yaml:"max_conns"`
 }
 
 func FromEnv(serviceName string) Conf {
@@ -20,6 +21,7 @@ func FromEnv(serviceName string) Conf {
 		ServerHost:  env.String("SERVER_HOST"),
 		ServerPort:  uint64(env.Int("SERVER_PORT")),
 		EtcdAddress: env.String("ETCD_ADDRESS"),
+		MaxConns:    env.Int("MAX_CONNS", 10000),
 	}
 }
 
@@ -30,5 +32,6 @@ func RPCFromEnv(serviceName string) Conf {
 		ServerHost:  network.GetNetworkIp(),
 		ServerPort:  network.GetRandomPort(),
 		EtcdAddress: env.String("ETCD_ADDRESS", "http://localhost:2379"),
+		MaxConns:    env.Int("MAX_CONNS", 10000),
 	}
 }

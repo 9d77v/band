@@ -23,6 +23,7 @@ type App struct {
 	ServiceName string
 	ServerHost  string
 	ServerPort  uint64
+	MaxConns    int
 	EtcdClient  *clientv3.Client
 }
 
@@ -36,6 +37,7 @@ func NewApp(p Conf) App {
 		ServiceName: p.ServiceName,
 		ServerPort:  p.ServerPort,
 		ServerHost:  p.ServerHost,
+		MaxConns:    p.MaxConns,
 		EtcdClient:  cli,
 	}
 }
@@ -74,7 +76,7 @@ func (a *App) Deregister() {
 	em.DeleteEndpoint(context.TODO(), key)
 }
 
-func (a *App) StartGrpcServer(register func(srv *grpc.Server)) {
+func (a *App) StartGrpcServer(register func(srv *grpc.Server), opt ...grpc.ServerOption) {
 	errc := make(chan error)
 	go func() {
 		c := make(chan os.Signal, 1)
@@ -85,7 +87,7 @@ func (a *App) StartGrpcServer(register func(srv *grpc.Server)) {
 	if err != nil {
 		panic(err)
 	}
-	srv := grpc.NewServer()
+	srv := grpc.NewServer(opt...)
 	register(srv)
 	a.Register()
 	go func() {
@@ -103,7 +105,6 @@ func (a *App) StartHttpServer(handler http.Handler) {
 		signal.Notify(c, os.Interrupt)
 		errc <- fmt.Errorf("%s", <-c)
 	}()
-
 	srv := &http.Server{
 		Addr:    fmt.Sprintf(":%d", a.ServerPort),
 		Handler: handler,

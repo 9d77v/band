@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/9d77v/band/pkg/stores/orm"
 	"gorm.io/driver/postgres"
@@ -35,6 +36,8 @@ func newClient(conf orm.Conf) (*gorm.DB, error) {
 	dsn := fmt.Sprintf("host=%s port=%d user=%s dbname=%s sslmode=disable password=%s",
 		conf.Host, conf.Port, conf.User, conf.DBName, conf.Password)
 	gormConfig := &gorm.Config{
+		CreateBatchSize: 1000,
+		PrepareStmt:     true,
 		NamingStrategy: schema.NamingStrategy{
 			SingularTable: true,
 			TablePrefix:   conf.TablePrefix,
@@ -52,6 +55,7 @@ func newClient(conf orm.Conf) (*gorm.DB, error) {
 	sqlDB, err := db.DB()
 	sqlDB.SetMaxIdleConns(conf.MaxIdleConns)
 	sqlDB.SetMaxOpenConns(conf.MaxOpenConns)
+	sqlDB.SetConnMaxLifetime(10 * time.Minute)
 	return db, err
 }
 

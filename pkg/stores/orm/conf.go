@@ -23,8 +23,8 @@ func FromEnv() Conf {
 		User:         env.String("DB_USER", "postgres"),
 		Password:     env.String("DB_PASSWORD", "123456"),
 		DBName:       env.String("DB_NAME"),
-		MaxIdleConns: env.Int("DB_MAX_IDEL_CONNS", 100),
-		MaxOpenConns: env.Int("DB_OPEN_IDEL_CONNS", 100),
+		MaxIdleConns: env.Int("DB_MAX_IDEL_CONNS", 25),
+		MaxOpenConns: env.Int("DB_MAX_OPEN_CONNS", 100),
 		TablePrefix:  env.String("DB_TABLE_PREFIX"),
 		Debug:        env.Bool("DEBUG", true),
 	}
