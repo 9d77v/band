@@ -71,5 +71,5 @@ func (s *SMS) SendSms(phoneNumbers, captcha string) (smsResp map[string]interfac
 			return nil, err
 		}
 	}
-	return nil, tryErr
+	return smsResp, tryErr
 }
