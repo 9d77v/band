@@ -17,7 +17,7 @@ type GrpcClient struct {
 	Conn *grpc.ClientConn
 }
 
-func NewGrpcClient(conf Conf) *GrpcClient {
+func NewGrpcClient(conf Conf, opts ...grpc.DialOption) *GrpcClient {
 	etcdAddress := strings.ReplaceAll(conf.EtcdAddress, "http", "etcd")
 	rawURL := fmt.Sprintf("%s/%s/services/%s", etcdAddress, conf.AppName, conf.ServiceName)
 	u, err := url.Parse(rawURL)
@@ -32,10 +32,11 @@ func NewGrpcClient(conf Conf) *GrpcClient {
 	if err != nil {
 		log.Panicln("init etcd resolver failed", cerr)
 	}
-	conn, err := grpc.Dial(rawURL,
+	defaultOpts := []grpc.DialOption{
 		grpc.WithResolvers(etcdResolver),
 		grpc.WithDefaultServiceConfig(`{"loadBalancingConfig": [ { "round_robin": {} } ]}`),
-		grpc.WithTransportCredentials(insecure.NewCredentials()))
+		grpc.WithTransportCredentials(insecure.NewCredentials())}
+	conn, err := grpc.Dial(rawURL, append(defaultOpts, opts...)...)
 	if err != nil {
 		log.Panicln("dial failed", err)
 	}
