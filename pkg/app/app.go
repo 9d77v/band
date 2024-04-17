@@ -44,28 +44,18 @@ func NewApp(p Conf) App {
 
 func (a *App) Register() {
 	target := a.AppName + "/services/" + a.ServiceName
-	em, _ := endpoints.NewManager(a.EtcdClient, target)
+	em, err := endpoints.NewManager(a.EtcdClient, target)
+	if err != nil {
+		log.Panicln(err)
+	}
 	addr := fmt.Sprintf("%s:%d", a.ServerHost, a.ServerPort)
 	key := target + "/" + strings.ReplaceAll(addr, ".", "-")
-	lease := clientv3.NewLease(a.EtcdClient)
-	leaseResp, _ := lease.Grant(context.TODO(), _ttl)
-	leaseRespChan, err := lease.KeepAlive(context.TODO(), leaseResp.ID)
-	if err != nil {
-		log.Panicf("lease failed:%s\n", err.Error())
-	}
-	err = em.AddEndpoint(context.TODO(), key, endpoints.Endpoint{Addr: addr}, clientv3.WithLease(leaseResp.ID))
+	lease, leaseID := getLeaseID(a.EtcdClient)
+	err = em.AddEndpoint(context.TODO(), key, endpoints.Endpoint{Addr: addr}, clientv3.WithLease(leaseID))
 	if err != nil {
 		log.Panicln("etce add endpoint failed")
 	}
-	go func() {
-		for {
-			leaseKeepResp := <-leaseRespChan
-			if leaseKeepResp == nil {
-				fmt.Printf("lease closed\n")
-				return
-			}
-		}
-	}()
+	leaseKeepAlive(lease, leaseID)
 }
 
 func (a *App) Deregister() {
