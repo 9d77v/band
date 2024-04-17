@@ -1,8 +1,8 @@
 package service
 
 import (
-	"{{.PKG_DIR}}/internal/apps/{{.SERVICE_LOWER}}/domain/repository"
-	"{{.PKG_DIR}}/internal/proto/{{.SERVICE_LOWER}}pb"
+	"{{.PKG_DIR}}/internal/apps/{{.SERVICE_PACKAGE}}/domain/repository"
+	{{.SERVICE_LOWER}}pb "{{.PKG_DIR}}/internal/proto/{{.SERVICE_PACKAGE}}pb"
 )
 
 type {{.SERVICE_UPPER}}AppService struct {

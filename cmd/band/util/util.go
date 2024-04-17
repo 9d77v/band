@@ -40,3 +40,22 @@ func FirstLower(s string) string {
 	}
 	return strings.ToLower(s[:1]) + s[1:]
 }
+
+func UnderscoreToCamelCase(input string) string {
+
+	parts := strings.Split(input, "_")
+
+	var result string
+
+	for _, part := range parts {
+
+		if len(part) > 0 {
+
+			result += strings.ToUpper(string(part[0])) + strings.ToLower(part[1:])
+
+		}
+
+	}
+
+	return result
+}

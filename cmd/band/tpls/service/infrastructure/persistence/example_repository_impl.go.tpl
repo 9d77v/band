@@ -7,9 +7,9 @@ import (
 	"github.com/9d77v/band/pkg/stores/orm"
 	"github.com/9d77v/band/pkg/stores/orm/base"
 	"github.com/9d77v/band/pkg/stores/orm/impl/postgres"
-	"{{.PKG_DIR}}/internal/apps/{{.SERVICE_LOWER}}/domain/entity"
-	"{{.PKG_DIR}}/internal/apps/{{.SERVICE_LOWER}}/domain/repository"
-	"{{.PKG_DIR}}/internal/apps/{{.SERVICE_LOWER}}/infrastructure/persistence/do"
+	"{{.PKG_DIR}}/internal/apps/{{.SERVICE_PACKAGE}}/domain/entity"
+	"{{.PKG_DIR}}/internal/apps/{{.SERVICE_PACKAGE}}/domain/repository"
+	"{{.PKG_DIR}}/internal/apps/{{.SERVICE_PACKAGE}}/infrastructure/persistence/do"
 
 	"gorm.io/gorm"
 )

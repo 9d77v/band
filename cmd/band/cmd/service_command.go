@@ -30,12 +30,14 @@ const (
 )
 
 type ServiceTpl struct {
-	PKG_DIR       string
-	SERVICE_UPPER string
-	SERVICE_LOWER string
-	ENTITY_UPPER  string
-	ENTITY_LOWER  string
-	ID_TYPE       string
+	PKG_DIR         string
+	SERVICE_UPPER   string
+	SERVICE_LOWER   string
+	SERVICE_PACKAGE string
+	ENTITY_UPPER    string
+	ENTITY_LOWER    string
+	ENTITY_PACKAGE  string
+	ID_TYPE         string
 }
 
 // initService
@@ -57,12 +59,14 @@ func initService() {
 		entity = service
 	}
 	serviceTpl := &ServiceTpl{
-		PKG_DIR:       pkgDir,
-		SERVICE_UPPER: strings.ToUpper(service[:1]) + service[1:],
-		SERVICE_LOWER: service,
-		ENTITY_UPPER:  strings.ToUpper(entity[:1]) + entity[1:],
-		ENTITY_LOWER:  entity,
-		ID_TYPE:       idType,
+		PKG_DIR:         pkgDir,
+		SERVICE_UPPER:   util.UnderscoreToCamelCase(service),
+		SERVICE_LOWER:   util.FirstLower(util.UnderscoreToCamelCase(service)),
+		SERVICE_PACKAGE: service,
+		ENTITY_UPPER:    util.UnderscoreToCamelCase(entity),
+		ENTITY_LOWER:    util.FirstLower(util.UnderscoreToCamelCase(entity)),
+		ENTITY_PACKAGE:  entity,
+		ID_TYPE:         idType,
 	}
 	servicelocalDir := "./internal/apps/" + service
 	if utils.FileExist(servicelocalDir) {
@@ -135,7 +139,7 @@ func handleServiceProto(tpl *ServiceTpl) {
 	--go-grpc_out=require_unimplemented_servers=false:. \
 	internal/proto/` + service + `pb/*.proto
 wire-` + service + `:
-	cd cmd/apps/project-service && wire gen && mv wire.go wire.go.back && cd ../../../
+	cd cmd/apps/` + service + `-service && wire gen && mv wire.go wire.go.back && cd ../../../
 ` + service + `-service:
 	go run cmd/apps/` + service + `-service/*.go`); err != nil {
 		panic(err)

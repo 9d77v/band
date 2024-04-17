@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/9d77v/band/pkg/stores/orm/base"
-	"{{.PKG_DIR}}/internal/apps/{{.SERVICE_LOWER}}/domain/entity"
+	"{{.PKG_DIR}}/internal/apps/{{.SERVICE_PACKAGE}}/domain/entity"
 )
 
 type {{.SERVICE_UPPER}}RepoTxFunc = func(ctx context.Context, repo {{.SERVICE_UPPER}}Repository) error

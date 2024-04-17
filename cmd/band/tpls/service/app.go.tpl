@@ -1,8 +1,8 @@
-package {{.SERVICE_LOWER}}
+package {{.SERVICE_PACKAGE}}
 
 import (
 	"github.com/9d77v/band/pkg/app"
-	"{{.PKG_DIR}}/internal/proto/{{.SERVICE_LOWER}}pb"
+	{{.SERVICE_LOWER}}pb "{{.PKG_DIR}}/internal/proto/{{.SERVICE_PACKAGE}}pb"
 	"google.golang.org/grpc"
 )
 

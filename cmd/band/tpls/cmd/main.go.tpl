@@ -15,7 +15,7 @@ func main() {
 		}
 	}
 	log.Init()
-	app, err := initApp("{{.SERVICE_LOWER}}-service")
+	app, err := initApp("{{.SERVICE_PACKAGE}}-service")
 	if err != nil {
 		panic(err)
 	}
