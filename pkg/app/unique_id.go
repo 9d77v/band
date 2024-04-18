@@ -30,7 +30,7 @@ func NewUniqueID(p Conf) *UniqueID {
 		client = &UniqueID{
 			NodeID: getNodeID(p),
 		}
-		snowflake.Epoch = 1713196800000 //2024-04-16 00:00:00 GMT+8
+		snowflake.Epoch = 1713369600000 //2024-04-18 00:00:00 GMT+8
 		node, err := snowflake.NewNode(client.NodeID)
 		if err != nil {
 			log.Panicln(err)
