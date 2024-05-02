@@ -33,32 +33,32 @@ func (r *{{.SERVICE_UPPER}}RepositoryImpl) Tx(ctx context.Context, fun func(ctx 
 
 // List{{.ENTITY_UPPER}} implements repository.{{.SERVICE_UPPER}}Repository.
 func (r *{{.SERVICE_UPPER}}RepositoryImpl) List{{.ENTITY_UPPER}}(ctx context.Context, q base.SearchCriteria) ([]*entity.{{.ENTITY_UPPER}}, int64, error) {
-	{{.ENTITY_LOWER}}s, total, err := base.Page[do.{{.ENTITY_UPPER}}DO](ctx, r.DB.GetDB(), &do.{{.ENTITY_UPPER}}DO{}, q)
+	{{.ENTITY_LOWER}}s, total, err := base.Page[do.{{.ENTITY_UPPER}}](ctx, r.DB.GetDB(), &do.{{.ENTITY_UPPER}}{}, q)
 	return do.To{{.ENTITY_UPPER}}s({{.ENTITY_LOWER}}s), total, err
 }
 
 // Create{{.ENTITY_UPPER}} implements repository.{{.SERVICE_UPPER}}Repository.
 func (r *{{.SERVICE_UPPER}}RepositoryImpl) Create{{.ENTITY_UPPER}}(ctx context.Context, in *entity.{{.ENTITY_UPPER}}) (*entity.{{.ENTITY_UPPER}}, error) {
 	db := r.DB.WithContext(ctx)
-	{{.ENTITY_LOWER}}DO := do.New{{.ENTITY_UPPER}}FromEntity(in)
-	err := db.Create({{.ENTITY_LOWER}}DO).Error()
-	return {{.ENTITY_LOWER}}DO.To{{.ENTITY_UPPER}}(), err
+	{{.ENTITY_LOWER}} := do.New{{.ENTITY_UPPER}}FromEntity(in)
+	err := db.Create({{.ENTITY_LOWER}}).Error()
+	return {{.ENTITY_LOWER}}.To{{.ENTITY_UPPER}}(), err
 }
 
 // Update{{.ENTITY_UPPER}} implements repository.{{.SERVICE_UPPER}}Repository.
 func (r *{{.SERVICE_UPPER}}RepositoryImpl) Update{{.ENTITY_UPPER}}ByID(ctx context.Context, in *entity.{{.ENTITY_UPPER}}) (*entity.{{.ENTITY_UPPER}}, error) {
 	db := r.DB.WithContext(ctx)
-	{{.ENTITY_LOWER}}DO := do.New{{.ENTITY_UPPER}}FromEntity(in)
-	err := db.Model({{.ENTITY_LOWER}}DO).Updates({{.ENTITY_LOWER}}DO).Error()
-	return {{.ENTITY_LOWER}}DO.To{{.ENTITY_UPPER}}(), err
+	{{.ENTITY_LOWER}} := do.New{{.ENTITY_UPPER}}FromEntity(in)
+	err := db.Model({{.ENTITY_LOWER}}).Updates({{.ENTITY_LOWER}}).Error()
+	return {{.ENTITY_LOWER}}.To{{.ENTITY_UPPER}}(), err
 }
 
 // Get{{.ENTITY_UPPER}}ByID implements repository.{{.SERVICE_UPPER}}Repository.
 func (r *{{.SERVICE_UPPER}}RepositoryImpl) Get{{.ENTITY_UPPER}}ByID(ctx context.Context, id string) (*entity.{{.ENTITY_UPPER}}, error) {
 	db := r.DB.WithContext(ctx)
-	{{.ENTITY_LOWER}}DO := new(do.{{.ENTITY_UPPER}}DO)
-	err := db.First({{.ENTITY_LOWER}}DO, id).Error()
-	return {{.ENTITY_LOWER}}DO.To{{.ENTITY_UPPER}}(), err
+	{{.ENTITY_LOWER}} := new(do.{{.ENTITY_UPPER}})
+	err := db.First({{.ENTITY_LOWER}}, id).Error()
+	return {{.ENTITY_LOWER}}.To{{.ENTITY_UPPER}}(), err
 }
 
 // SoftDelete{{.ENTITY_UPPER}} implements repository.{{.SERVICE_UPPER}}Repository.
@@ -68,9 +68,9 @@ func (r *{{.SERVICE_UPPER}}RepositoryImpl) SoftDelete{{.ENTITY_UPPER}}ByID(ctx c
 	if len(ids) == 0 {
 		err = errors.New("id cannot be empty")
 	} else if len(ids) == 1 {
-		err = db.Where("id = ?", ids[0]).Delete(&do.{{.ENTITY_UPPER}}DO{}).Error()
+		err = db.Where("id = ?", ids[0]).Delete(&do.{{.ENTITY_UPPER}}{}).Error()
 	} else {
-		err = db.Where("id in ?", ids).Delete(&do.{{.ENTITY_UPPER}}DO{}).Error()
+		err = db.Where("id in ?", ids).Delete(&do.{{.ENTITY_UPPER}}{}).Error()
 	}
 	return err
 }
@@ -82,9 +82,9 @@ func (r *{{.SERVICE_UPPER}}RepositoryImpl) Delete{{.ENTITY_UPPER}}ByID(ctx conte
 	if len(ids) == 0 {
 		err = errors.New("id cannot be empty")
 	} else if len(ids) == 1 {
-		err = db.Unscoped().Where("id = ?", ids[0]).Delete(&do.{{.ENTITY_UPPER}}DO{}).Error()
+		err = db.Unscoped().Where("id = ?", ids[0]).Delete(&do.{{.ENTITY_UPPER}}{}).Error()
 	} else {
-		err = db.Unscoped().Where("id in ?", ids).Delete(&do.{{.ENTITY_UPPER}}DO{}).Error()
+		err = db.Unscoped().Where("id in ?", ids).Delete(&do.{{.ENTITY_UPPER}}{}).Error()
 	}
 	return err
 }
