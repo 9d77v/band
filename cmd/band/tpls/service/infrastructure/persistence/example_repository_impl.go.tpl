@@ -54,7 +54,7 @@ func (r *{{.SERVICE_UPPER}}RepositoryImpl) Update{{.ENTITY_UPPER}}ByID(ctx conte
 }
 
 // Get{{.ENTITY_UPPER}}ByID implements repository.{{.SERVICE_UPPER}}Repository.
-func (r *{{.SERVICE_UPPER}}RepositoryImpl) Get{{.ENTITY_UPPER}}ByID(ctx context.Context, id string) (*entity.{{.ENTITY_UPPER}}, error) {
+func (r *{{.SERVICE_UPPER}}RepositoryImpl) Get{{.ENTITY_UPPER}}ByID(ctx context.Context, id int64) (*entity.{{.ENTITY_UPPER}}, error) {
 	db := r.DB.WithContext(ctx)
 	{{.ENTITY_LOWER}} := new(do.{{.ENTITY_UPPER}})
 	err := db.First({{.ENTITY_LOWER}}, id).Error()
@@ -62,7 +62,7 @@ func (r *{{.SERVICE_UPPER}}RepositoryImpl) Get{{.ENTITY_UPPER}}ByID(ctx context.
 }
 
 // SoftDelete{{.ENTITY_UPPER}} implements repository.{{.SERVICE_UPPER}}Repository.
-func (r *{{.SERVICE_UPPER}}RepositoryImpl) SoftDelete{{.ENTITY_UPPER}}ByID(ctx context.Context, ids ...string) error {
+func (r *{{.SERVICE_UPPER}}RepositoryImpl) SoftDelete{{.ENTITY_UPPER}}ByIDs(ctx context.Context, ids ...int64) error {
 	db := r.DB.WithContext(ctx)
 	var err error
 	if len(ids) == 0 {
@@ -76,7 +76,7 @@ func (r *{{.SERVICE_UPPER}}RepositoryImpl) SoftDelete{{.ENTITY_UPPER}}ByID(ctx c
 }
 
 // Delete{{.ENTITY_UPPER}} implements repository.{{.SERVICE_UPPER}}Repository.
-func (r *{{.SERVICE_UPPER}}RepositoryImpl) Delete{{.ENTITY_UPPER}}ByID(ctx context.Context, ids ...string) error {
+func (r *{{.SERVICE_UPPER}}RepositoryImpl) Delete{{.ENTITY_UPPER}}ByIDs(ctx context.Context, ids ...int64) error {
 	db := r.DB.WithContext(ctx)
 	var err error
 	if len(ids) == 0 {
