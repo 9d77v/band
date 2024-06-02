@@ -1,8 +1,11 @@
 package beanutil
 
 import (
+	"bytes"
+	"encoding/json"
 	"errors"
 	"fmt"
+	"log"
 	"reflect"
 )
 
@@ -55,4 +58,22 @@ func ConvertList[T, S any](soure []*S) ([]*T, error) {
 		resps = append(resps, resp)
 	}
 	return resps, nil
+}
+
+func ConvertToMap(content interface{}) map[string]interface{} {
+	var name map[string]interface{}
+	if marshalContent, err := json.Marshal(content); err != nil {
+		log.Println(err)
+	} else {
+		d := json.NewDecoder(bytes.NewReader(marshalContent))
+		d.UseNumber()
+		if err := d.Decode(&name); err != nil {
+			log.Println(err)
+		} else {
+			for k, v := range name {
+				name[k] = v
+			}
+		}
+	}
+	return name
 }
