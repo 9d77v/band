@@ -23,17 +23,17 @@ func TestCoStarPromt_ToString(t *testing.T) {
 			Tone:      "Tone",
 			Audience:  "Audience",
 			Response:  "Response",
-		}, `### CONTEXT（上下文） ###
+		}, `# 上下文 #
 Context
-### OBJECTIVE（目标） ###
+# 目标 #
 Objective
-### STYLE（风格） ###
+# 风格 #
 Style
-### TONE（语调） ###
+# 语调 #
 Tone
-### AUDIENCE（受众） ###
+# 受众 #
 Audience
-### RESPONSE（响应） ###
+# 响应 #
 Response`},
 	}
 	for _, tt := range tests {

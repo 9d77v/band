@@ -1,5 +1,11 @@
 package prompt
 
+import (
+	"bytes"
+	"html/template"
+	"log"
+)
+
 type CoStarPromt struct {
 	Context   string
 	Objective string
@@ -9,17 +15,35 @@ type CoStarPromt struct {
 	Response  string
 }
 
+const defaultTemplate = `# 上下文 #
+{{.Context}}
+# 目标 #
+{{.Objective}}
+# 风格 #
+{{.Style}}
+# 语调 #
+{{.Tone}}
+# 受众 #
+{{.Audience}}
+# 响应 #
+{{.Response}}`
+
 func (c CoStarPromt) ToString() string {
-	return `### CONTEXT（上下文） ###
-` + c.Context + `
-### OBJECTIVE（目标） ###
-` + c.Objective + `
-### STYLE（风格） ###
-` + c.Style + `
-### TONE（语调） ###
-` + c.Tone + `
-### AUDIENCE（受众） ###
-` + c.Audience + `
-### RESPONSE（响应） ###
-` + c.Response
+	tpl := template.Must(template.New("first").Parse(defaultTemplate))
+	var buf bytes.Buffer
+	err := tpl.Execute(&buf, c)
+	if err != nil {
+		log.Println(err)
+	}
+	return buf.String()
+}
+
+func (c CoStarPromt) Format(tplStr string) string {
+	tpl := template.Must(template.New("custom").Parse(tplStr))
+	var buf bytes.Buffer
+	err := tpl.Execute(&buf, c)
+	if err != nil {
+		log.Println(err)
+	}
+	return buf.String()
 }
