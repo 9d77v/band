@@ -163,6 +163,7 @@ func GenerateImage(req *ImageRequest) (string, error) {
 	}
 	taskID := response.Output.TaskID
 	// Step 2: Check text to image task status
+	time.Sleep(3 * time.Second)
 	for {
 		checkResponse, err := CheckText2ImageTask(req.ApiKey, taskID)
 		if err != nil {
@@ -183,7 +184,6 @@ func GenerateImage(req *ImageRequest) (string, error) {
 			return "", fmt.Errorf("text to image task failed with code:%s ,message: %s",
 				checkResponse.Output.Code, checkResponse.Output.Message)
 		}
-		// Task is still running, wait for 3 seconds before checking again
-		time.Sleep(3 * time.Second)
+		time.Sleep(1 * time.Second)
 	}
 }

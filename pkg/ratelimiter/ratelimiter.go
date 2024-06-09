@@ -32,6 +32,15 @@ func (r *RateLimiter) AllowByDayRange(key string) (bool, error) {
 	return r.AllowByTimeRange(key, startTime, endTime)
 }
 
+// AllowByDayRange 实现限制一月内的访问次数的逻辑
+func (r *RateLimiter) AllowByMonthRange(key string) (bool, error) {
+	now := time.Now()
+	next := now.AddDate(0, 1, 0)
+	startTime := time.Date(now.Year(), now.Month(), 1, 0, 0, 0, 0, now.Location()).Unix()
+	endTime := time.Date(next.Year(), next.Month(), 1, 0, 0, 0, 0, now.Location()).Unix() - 1
+	return r.AllowByTimeRange(key, startTime, endTime)
+}
+
 // AllowByTimeRange 实现限制一个时间段内的访问次数的逻辑
 func (r *RateLimiter) AllowByTimeRange(key string, startTime, endTime int64) (bool, error) {
 	redisKey := fmt.Sprintf("%s:%d", key, startTime)
