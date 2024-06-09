@@ -7,6 +7,7 @@ import (
 )
 
 type Oss interface {
+	ExternalAddr() string
 	PresignedPutURL(ctx context.Context, objectName string, expires time.Duration, etag, mimeType string, size int64) (string, error)
 	PresignedGetURL(ctx context.Context, objectName string, expires time.Duration) (string, error)
 	StatObject(ctx context.Context, objectName string) (ObjectInfo, error)

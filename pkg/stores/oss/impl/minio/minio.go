@@ -34,6 +34,10 @@ func NewMinio(conf oss.Conf) *Minio {
 	}
 }
 
+func (m *Minio) ExternalAddr() string {
+	return m.conf.ExternalAddr
+}
+
 func (m *Minio) GetSTSAssumeRole(uid string, policyPattern string) (cr.Value, error) {
 	var stsOpts cr.STSAssumeRoleOptions
 	stsOpts.AccessKey = m.conf.AccessKey

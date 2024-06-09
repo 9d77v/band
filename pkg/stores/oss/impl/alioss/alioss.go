@@ -34,6 +34,10 @@ func NewOSS(conf oss.Conf) *OSS {
 	}
 }
 
+func (m *OSS) ExternalAddr() string {
+	return m.conf.ExternalAddr
+}
+
 func (m *OSS) PresignedPutURL(ctx context.Context, objectName string, expires time.Duration, etag, mimeType string, size int64) (string, error) {
 	options := []ossSDK.Option{
 		ossSDK.ContentType(mimeType),
