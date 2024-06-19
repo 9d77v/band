@@ -63,6 +63,12 @@ func (o *QianWen) GenerateImage(ctx context.Context, req *llm.GenerateImageReque
 
 func (o *QianWen) GenerateContentFromImage(ctx context.Context,
 	req *llm.GenerateContentFromImageRequest) (*llm.GenerateContentFromImageResponse, error) {
+	var responseFormat *ai.ChatCompletionResponseFormat
+	if req.ChatCompletionResponseFormatType == llm.ChatCompletionResponseFormatTypeJSONObject {
+		responseFormat = &ai.ChatCompletionResponseFormat{
+			Type: ai.ChatCompletionResponseFormatTypeJSONObject,
+		}
+	}
 	requestBody := ai.ChatCompletionRequest{
 		Model: req.Model,
 		Messages: []ai.ChatCompletionMessage{
@@ -71,7 +77,7 @@ func (o *QianWen) GenerateContentFromImage(ctx context.Context,
 					URL: req.ImageUrl, Detail: ""}},
 				{Type: ai.ChatMessagePartTypeText, Text: req.Prompt}}}},
 		TopP:           llm.DefaultTopP,
-		ResponseFormat: &ai.ChatCompletionResponseFormat{Type: ai.ChatCompletionResponseFormatTypeJSONObject},
+		ResponseFormat: responseFormat,
 	}
 	res, err := o.CreateChatCompletion(context.Background(), requestBody)
 	if err != nil {
