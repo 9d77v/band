@@ -33,10 +33,12 @@ type GenerateImageResponse struct {
 }
 
 type GenerateContentFromImageRequest struct {
-	Model    string
-	Prompt   string
-	ImageUrl string
+	Model                            string
+	Prompt                           string
+	ImageUrl                         string
+	ChatCompletionResponseFormatType ChatCompletionResponseFormatType
 }
+
 type GenerateContentFromImageResponse struct {
 	Data string
 }

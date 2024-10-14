@@ -67,7 +67,7 @@ func (o *OpenAI) GenerateContentFromImage(ctx context.Context,
 					URL: req.ImageUrl, Detail: ""}},
 				{Type: ai.ChatMessagePartTypeText, Text: req.Prompt}}}},
 		TopP:           llm.DefaultTopP,
-		ResponseFormat: &ai.ChatCompletionResponseFormat{Type: ai.ChatCompletionResponseFormatTypeJSONObject},
+		ResponseFormat: &ai.ChatCompletionResponseFormat{Type: ai.ChatCompletionResponseFormatType(req.ChatCompletionResponseFormatType)},
 	}
 	res, err := o.CreateChatCompletion(context.Background(), requestBody)
 	if err != nil {
