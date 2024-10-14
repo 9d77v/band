@@ -1,6 +1,7 @@
 package cache_factory
 
 import (
+	"log"
 	"sync"
 
 	"github.com/9d77v/band/pkg/stores/cache"
@@ -27,6 +28,7 @@ func NewCache(conf cache.Conf) (cache.Cache, error) {
 	default:
 		client, err = freecache.NewFreeCache(conf)
 	}
+	log.Println("connected to cache:", client)
 	return client, err
 }
 

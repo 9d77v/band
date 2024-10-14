@@ -1,6 +1,6 @@
 package do
 
-import "{{.PKG_DIR}}/internal/apps/{{.SERVICE_PACKAGE}}/domain/entity"
+import "{{.PKG_DIR}}/apps/{{.SERVICE_PACKAGE}}/domain/entity"
 
 type {{.ENTITY_UPPER}} struct {
 }

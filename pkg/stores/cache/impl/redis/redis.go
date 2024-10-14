@@ -2,7 +2,6 @@ package redis
 
 import (
 	"context"
-	"log"
 	"time"
 
 	"github.com/9d77v/band/pkg/stores/cache"
@@ -24,7 +23,6 @@ func NewRedis(conf cache.Conf) (*Redis, error) {
 	if err != nil {
 		panic(err)
 	}
-	log.Println("connected to redis:", client)
 	return &Redis{
 		client: client,
 		conf:   conf,

@@ -68,7 +68,7 @@ func initService() {
 		ENTITY_PACKAGE:  entity,
 		ID_TYPE:         idType,
 	}
-	servicelocalDir := "./internal/apps/" + service
+	servicelocalDir := "./apps/" + service
 	if utils.FileExist(servicelocalDir) {
 		fmt.Println("service created")
 		return
@@ -118,7 +118,7 @@ func walkServiceDir(tpl *ServiceTpl, localDir, serverDir string, dirs []fs.DirEn
 }
 
 func handleServiceProto(tpl *ServiceTpl) {
-	protoDir := "./internal/proto/" + service + "pb"
+	protoDir := "./proto/" + service + "pb"
 	os.MkdirAll(protoDir, os.ModePerm)
 	fd, err := tpls.ProtoFiles.ReadFile("proto/example.proto.tpl")
 	if err != nil {
@@ -132,12 +132,12 @@ func handleServiceProto(tpl *ServiceTpl) {
 	}
 	defer file.Close()
 
-	if _, err = file.WriteString(`protoc-` + service + `: internal/proto/` + service + `pb/*.proto
-	protoc -I./internal/proto/` + service + `pb \
-	-I./internal/proto/include \
+	if _, err = file.WriteString(`protoc-` + service + `: proto/` + service + `pb/*.proto
+	protoc -I./proto/` + service + `pb \
+	-I./proto/include \
 	--go_out=. \
 	--go-grpc_out=require_unimplemented_servers=false:. \
-	internal/proto/` + service + `pb/*.proto
+	proto/` + service + `pb/*.proto
 wire-` + service + `:
 	cd cmd/apps/` + service + `-service && wire gen && mv wire.go wire.go.back && cd ../../../
 ` + service + `-service:
