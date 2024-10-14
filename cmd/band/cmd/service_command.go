@@ -134,7 +134,6 @@ func handleServiceProto(tpl *ServiceTpl) {
 
 	if _, err = file.WriteString(`protoc-` + service + `: proto/` + service + `pb/*.proto
 	protoc -I./proto/` + service + `pb \
-	-I./proto/include \
 	--go_out=. \
 	--go-grpc_out=require_unimplemented_servers=false:. \
 	proto/` + service + `pb/*.proto

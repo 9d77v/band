@@ -7,7 +7,7 @@ import (
 	"github.com/9d77v/band/pkg/stores/orm/orm_factory"
 	{{.SERVICE_LOWER}} "{{.PKG_DIR}}/apps/{{.SERVICE_PACKAGE}}"
 	"{{.PKG_DIR}}/apps/{{.SERVICE_PACKAGE}}/application/service"
-	"{{.PKG_DIR}}/apps/{{.SERVICE_PACKAGE}}/persistence"
+	"{{.PKG_DIR}}/apps/{{.SERVICE_PACKAGE}}/infrastructure/persistence"
 	"github.com/google/wire"
 )
 
