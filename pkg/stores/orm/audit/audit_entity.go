@@ -14,7 +14,7 @@ type AuditEntity struct {
 }
 
 func (u *AuditEntity) BeforeCreate(tx *gorm.DB) (err error) {
-	claims := jwt.NewContextKey("claims").Get(tx.Statement.Context)
+	claims := jwt.NewContextKey("claims").GetCustomClaims(tx.Statement.Context)
 	if claims != nil {
 		tx.Statement.SetColumn("CreatedBy", claims.ID)
 		tx.Statement.SetColumn("UpdatedBy", claims.ID)
@@ -23,7 +23,7 @@ func (u *AuditEntity) BeforeCreate(tx *gorm.DB) (err error) {
 }
 
 func (u *AuditEntity) BeforeUpdate(tx *gorm.DB) (err error) {
-	claims := jwt.NewContextKey("claims").Get(tx.Statement.Context)
+	claims := jwt.NewContextKey("claims").GetCustomClaims(tx.Statement.Context)
 	if claims != nil {
 		tx.Statement.SetColumn("UpdatedBy", claims.ID)
 	}
@@ -31,7 +31,7 @@ func (u *AuditEntity) BeforeUpdate(tx *gorm.DB) (err error) {
 }
 
 func (u *AuditEntity) BeforeDelete(tx *gorm.DB) (err error) {
-	claims := jwt.NewContextKey("claims").Get(tx.Statement.Context)
+	claims := jwt.NewContextKey("claims").GetCustomClaims(tx.Statement.Context)
 	if claims != nil {
 		tx.Statement.SetColumn("UpdatedBy", claims.ID)
 	}
@@ -39,7 +39,7 @@ func (u *AuditEntity) BeforeDelete(tx *gorm.DB) (err error) {
 }
 
 func (u *AuditEntity) BeforeSave(tx *gorm.DB) (err error) {
-	claims := jwt.NewContextKey("claims").Get(tx.Statement.Context)
+	claims := jwt.NewContextKey("claims").GetCustomClaims(tx.Statement.Context)
 	if claims != nil {
 		tx.Statement.SetColumn("UpdatedBy", claims.ID)
 		if u == nil {
