@@ -5,31 +5,25 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"log"
-	"strconv"
 	"time"
 
 	"github.com/9d77v/band/pkg/stores/oss"
-	ossSDK "github.com/aliyun/aliyun-oss-go-sdk/oss"
+	ossSDK "github.com/aliyun/alibabacloud-oss-go-sdk-v2/oss"
+	"github.com/aliyun/alibabacloud-oss-go-sdk-v2/oss/credentials"
 )
 
 type OSS struct {
-	client *ossSDK.Bucket
+	client *ossSDK.Client
 	conf   oss.Conf
 }
 
 func NewOSS(conf oss.Conf) *OSS {
-	client, err := ossSDK.New(fmt.Sprintf("https://%s", conf.Addr),
-		conf.AccessKey, conf.SecretKey)
-	if err != nil {
-		log.Fatalln(err)
-	}
-	bucket, err := client.Bucket(conf.BucketName)
-	if err != nil {
-		log.Fatalln(err)
-	}
+	provider := credentials.NewStaticCredentialsProvider(conf.AccessKey, conf.SecretKey)
+	cfg := ossSDK.LoadDefaultConfig().
+		WithCredentialsProvider(provider).
+		WithRegion(conf.Region)
 	return &OSS{
-		client: bucket,
+		client: ossSDK.NewClient(cfg),
 		conf:   conf,
 	}
 }
@@ -39,34 +33,69 @@ func (m *OSS) ExternalAddr() string {
 }
 
 func (m *OSS) PresignedPutURL(ctx context.Context, objectName string, expires time.Duration, etag, mimeType string, size int64) (string, error) {
-	options := []ossSDK.Option{
-		ossSDK.ContentType(mimeType),
+	result, err := m.client.Presign(
+		ctx,
+		&ossSDK.PutObjectRequest{
+			Bucket:        &m.conf.BucketName,
+			Key:           &objectName,
+			ContentLength: &size,
+			ContentType:   &mimeType,
+		},
+		ossSDK.PresignExpires(expires),
+	)
+	if err != nil {
+		return "", err
 	}
-	return m.client.SignURL(objectName, ossSDK.HTTPPut, int64(expires.Seconds()), options...)
+	return result.URL, nil
 }
 
 func (m *OSS) PresignedGetURL(ctx context.Context, objectName string, expires time.Duration) (string, error) {
-	return m.client.SignURL(objectName, ossSDK.HTTPGet, int64(expires.Seconds()))
+	result, err := m.client.Presign(
+		ctx,
+		&ossSDK.GetObjectRequest{
+			Bucket: &m.conf.BucketName,
+			Key:    &objectName,
+		},
+		ossSDK.PresignExpires(expires),
+	)
+	if err != nil {
+		return "", err
+	}
+	return result.URL, nil
 }
 
 func (m *OSS) PutObject(ctx context.Context, objectName string, reader io.Reader, objectSize int64, contentType string) error {
-	return m.client.PutObject(objectName, reader)
+	_, err := m.client.PutObject(ctx, &ossSDK.PutObjectRequest{
+		Bucket:        &m.conf.BucketName,
+		Key:           &objectName,
+		Body:          reader,
+		ContentType:   &contentType,
+		ContentLength: &objectSize,
+	})
+	return err
 }
 
 func (m *OSS) GetObject(ctx context.Context, objectName string, opts oss.GetObjectOption) (io.Reader, error) {
-	ossOptions := []ossSDK.Option{}
 	bytesRange := opts.GetRange()
+	var rangeStr *string
 	if bytesRange != nil {
-		ossOptions = append(ossOptions,
-			ossSDK.Range(bytesRange.Start, bytesRange.End))
+		obj, err := m.StatObject(ctx, objectName)
+		if err != nil {
+			return nil, err
+		}
+		str := fmt.Sprintf("%d~%d/%d", bytesRange.Start, bytesRange.End, obj.Size)
+		rangeStr = &str
 	}
-	body, err := m.client.GetObject(objectName, ossOptions...)
+	res, err := m.client.GetObject(ctx, &ossSDK.GetObjectRequest{
+		Bucket: &m.conf.BucketName,
+		Key:    &objectName,
+		Range:  rangeStr,
+	})
 	if err != nil {
 		return nil, err
 	}
-
-	data, err := io.ReadAll(body)
-	body.Close()
+	data, err := io.ReadAll(res.Body)
+	res.Body.Close()
 	if err != nil {
 		return nil, err
 	}
@@ -74,10 +103,15 @@ func (m *OSS) GetObject(ctx context.Context, objectName string, opts oss.GetObje
 }
 
 func (m *OSS) StatObject(ctx context.Context, objectName string) (oss.ObjectInfo, error) {
-	obj, err := m.client.GetObjectMeta(objectName)
-	size, _ := strconv.ParseInt(obj.Get("Content-Length"), 10, 64)
+	obj, err := m.client.GetObjectMeta(ctx, &ossSDK.GetObjectMetaRequest{
+		Bucket: &m.conf.BucketName,
+		Key:    &objectName,
+	})
+	if err != nil {
+		return oss.ObjectInfo{}, err
+	}
 	return oss.ObjectInfo{
-		Size: size,
+		Size: obj.ContentLength,
 	}, err
 }
 
@@ -86,5 +120,9 @@ func (m *OSS) GetBucketName() string {
 }
 
 func (m *OSS) DeleteObject(ctx context.Context, objectName string) error {
-	return m.client.DeleteObject(objectName)
+	_, err := m.client.DeleteObject(ctx, &ossSDK.DeleteObjectRequest{
+		Bucket: &m.conf.BucketName,
+		Key:    &objectName,
+	})
+	return err
 }

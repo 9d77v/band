@@ -15,3 +15,11 @@ func RandomString(n int) string {
 	}
 	return string(p)
 }
+
+func CountCharacters(s string) int {
+	count := 0
+	for _, _ = range s {
+		count++
+	}
+	return count
+}

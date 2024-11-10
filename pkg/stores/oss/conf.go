@@ -11,6 +11,7 @@ type Conf struct {
 	SecretKey      string `yaml:"secret_key"`
 	ExpiryDuration int    `yaml:"expiry_duration"`
 	BucketName     string `yaml:"bucket_name"`
+	Region         string `yaml:"region"`
 }
 
 func FromEnv() Conf {
@@ -22,5 +23,6 @@ func FromEnv() Conf {
 		AccessKey:    env.String("OSS_ACCESS_KEY", "minio"),
 		SecretKey:    env.String("OSS_SECRET_KEY", "minio123"),
 		BucketName:   env.String("OSS_BUCKET_NAME"),
+		Region:       env.String("OSS_REGION"),
 	}
 }
