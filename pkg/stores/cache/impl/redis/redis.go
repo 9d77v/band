@@ -40,7 +40,7 @@ func (r *Redis) Del(ctx context.Context, key string) error {
 	return r.client.Del(ctx, key).Err()
 }
 func (r *Redis) GetDel(ctx context.Context, key string) (string, error) {
-	return r.client.Get(ctx, key).Result()
+	return r.client.GetDel(ctx, key).Result()
 }
 func (r *Redis) PTTL(ctx context.Context, key string) (time.Duration, error) {
 	return r.client.PTTL(ctx, key).Result()
