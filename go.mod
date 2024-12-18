@@ -14,7 +14,6 @@ require (
 	github.com/joho/godotenv v1.5.1
 	github.com/minio/minio-go/v7 v7.0.63
 	github.com/redis/go-redis/v9 v9.1.0
-	github.com/sashabaranov/go-openai v1.24.1
 	github.com/spf13/cobra v1.7.0
 	go.etcd.io/etcd/client/v3 v3.5.13
 	google.golang.org/grpc v1.62.1
