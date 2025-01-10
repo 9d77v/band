@@ -25,6 +25,7 @@ type SearchCriteria struct {
 	Columns string
 	Table   string
 	SearchField
+	Preloads       []PreloadField
 	Joins          []string
 	Order          string
 	Group          string
@@ -97,6 +98,9 @@ func (sc *SearchCriteria) BuildDB(db *gorm.DB) *gorm.DB {
 	}
 	for _, v := range sc.Joins {
 		db = db.Joins(v)
+	}
+	for _, v := range sc.Preloads {
+		db = db.Preload(v.Name, v.Args...)
 	}
 	for _, v := range sc.TermFields {
 		if len(v.Value) == 1 {

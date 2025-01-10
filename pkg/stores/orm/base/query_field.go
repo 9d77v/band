@@ -9,9 +9,16 @@ type TermField struct {
 	Name  string        `json:"name"`  //查询字段名称
 	Value []interface{} `json:"value"` //查询字段值
 }
+
+type PreloadField struct {
+	Name string
+	Args []interface{}
+}
+
 type NotNullField struct {
 	Name string `json:"name"` //查询字段名称
 }
+
 type LTField struct {
 	Name  string  `json:"name"`
 	Value float64 `json:"value"`
