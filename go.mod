@@ -1,6 +1,6 @@
 module github.com/9d77v/band
 
-go 1.22.3
+go 1.24.0
 
 require (
 	github.com/alibabacloud-go/darabonba-openapi/v2 v2.0.10

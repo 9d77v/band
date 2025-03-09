@@ -15,7 +15,7 @@ type Conf struct {
 func FromEnv() Conf {
 	return Conf{
 		AppName:    env.String("APP_NAME"),
-		Level:      env.String("LOG_LEVEL", LevelDebug),
+		Level:      env.String("LOG_LEVEL", LevelInfo),
 		MaxSize:    env.Int("LOG_MAX_SIZE", 100),
 		MaxBackups: env.Int("LOG_MAX_BACKUPS", 7),
 		MaxAge:     env.Int("LOG_MAX_AGE", 30),

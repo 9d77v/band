@@ -28,7 +28,10 @@ func Init() {
 		LocalTime:  true,
 		Compress:   false, // disabled by default
 	}
-	writers := []io.Writer{writer, os.Stdout}
+	writers := []io.Writer{writer}
+	if conf.Level == LevelDebug {
+		writers = append(writers, os.Stdout)
+	}
 	fileAndStdoutWriter := io.MultiWriter(writers...)
 	Logger = slog.New(slog.NewJSONHandler(fileAndStdoutWriter, &slog.HandlerOptions{
 		Level: level,
