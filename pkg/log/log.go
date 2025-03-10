@@ -19,7 +19,10 @@ func Init() {
 	if err != nil {
 		panic(err)
 	}
-	path := fmt.Sprintf("logs/%s.log", conf.AppName)
+	path := conf.Path
+	if path == "" {
+		path = fmt.Sprintf("logs/%s.log", conf.AppName)
+	}
 	writer := &lumberjack.Logger{
 		Filename:   path,
 		MaxSize:    conf.MaxSize, // megabytes
