@@ -9,7 +9,7 @@ require (
 	github.com/alibabacloud-go/tea-utils/v2 v2.0.6
 	github.com/aliyun/alibabacloud-oss-go-sdk-v2 v1.1.2
 	github.com/apache/rocketmq-client-go/v2 v2.1.2
-	github.com/golang-jwt/jwt/v5 v5.0.0
+	github.com/golang-jwt/jwt/v5 v5.2.2
 	github.com/google/uuid v1.6.0
 	github.com/joho/godotenv v1.5.1
 	github.com/minio/minio-go/v7 v7.0.63
