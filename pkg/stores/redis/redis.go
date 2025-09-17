@@ -129,11 +129,6 @@ func (r *Redis) BFReserve(ctx context.Context, key string, errorRate float64, ca
 	return r.client.BFReserve(ctx, key, errorRate, capacity)
 }
 
-// BFReserveArgs implements redis.Cmdable.
-func (r *Redis) BFReserveArgs(ctx context.Context, key string, options *redis.BFReserveOptions) *redis.StatusCmd {
-	return r.client.BFReserveArgs(ctx, key, options)
-}
-
 // BFReserveExpansion implements redis.Cmdable.
 func (r *Redis) BFReserveExpansion(ctx context.Context, key string, errorRate float64, capacity int64, expansion int64) *redis.StatusCmd {
 	return r.client.BFReserveExpansion(ctx, key, errorRate, capacity, expansion)
@@ -202,11 +197,6 @@ func (r *Redis) CFMExists(ctx context.Context, key string, elements ...interface
 // CFReserve implements redis.Cmdable.
 func (r *Redis) CFReserve(ctx context.Context, key string, capacity int64) *redis.StatusCmd {
 	return r.client.CFReserve(ctx, key, capacity)
-}
-
-// CFReserveArgs implements redis.Cmdable.
-func (r *Redis) CFReserveArgs(ctx context.Context, key string, options *redis.CFReserveOptions) *redis.StatusCmd {
-	return r.client.CFReserveArgs(ctx, key, options)
 }
 
 // CFReserveBucketSize implements redis.Cmdable.
@@ -337,51 +327,6 @@ func (r *Redis) TDigestRevRank(ctx context.Context, key string, values ...float6
 // TDigestTrimmedMean implements redis.Cmdable.
 func (r *Redis) TDigestTrimmedMean(ctx context.Context, key string, lowCutQuantile float64, highCutQuantile float64) *redis.FloatCmd {
 	return r.client.TDigestTrimmedMean(ctx, key, lowCutQuantile, highCutQuantile)
-}
-
-// TFCall implements redis.Cmdable.
-func (r *Redis) TFCall(ctx context.Context, libName string, funcName string, numKeys int) *redis.Cmd {
-	return r.client.TFCall(ctx, libName, funcName, numKeys)
-}
-
-// TFCallASYNC implements redis.Cmdable.
-func (r *Redis) TFCallASYNC(ctx context.Context, libName string, funcName string, numKeys int) *redis.Cmd {
-	return r.client.TFCallASYNC(ctx, libName, funcName, numKeys)
-}
-
-// TFCallASYNCArgs implements redis.Cmdable.
-func (r *Redis) TFCallASYNCArgs(ctx context.Context, libName string, funcName string, numKeys int, options *redis.TFCallOptions) *redis.Cmd {
-	return r.client.TFCallASYNCArgs(ctx, libName, funcName, numKeys, options)
-}
-
-// TFCallArgs implements redis.Cmdable.
-func (r *Redis) TFCallArgs(ctx context.Context, libName string, funcName string, numKeys int, options *redis.TFCallOptions) *redis.Cmd {
-	return r.client.TFCallArgs(ctx, libName, funcName, numKeys, options)
-}
-
-// TFunctionDelete implements redis.Cmdable.
-func (r *Redis) TFunctionDelete(ctx context.Context, libName string) *redis.StatusCmd {
-	return r.client.TFunctionDelete(ctx, libName)
-}
-
-// TFunctionList implements redis.Cmdable.
-func (r *Redis) TFunctionList(ctx context.Context) *redis.MapStringInterfaceSliceCmd {
-	return r.client.TFunctionList(ctx)
-}
-
-// TFunctionListArgs implements redis.Cmdable.
-func (r *Redis) TFunctionListArgs(ctx context.Context, options *redis.TFunctionListOptions) *redis.MapStringInterfaceSliceCmd {
-	return r.client.TFunctionListArgs(ctx, options)
-}
-
-// TFunctionLoad implements redis.Cmdable.
-func (r *Redis) TFunctionLoad(ctx context.Context, lib string) *redis.StatusCmd {
-	return r.client.TFunctionLoad(ctx, lib)
-}
-
-// TFunctionLoadArgs implements redis.Cmdable.
-func (r *Redis) TFunctionLoadArgs(ctx context.Context, lib string, options *redis.TFunctionLoadOptions) *redis.StatusCmd {
-	return r.client.TFunctionLoadArgs(ctx, lib, options)
 }
 
 // TopKAdd implements redis.Cmdable.
@@ -1878,4 +1823,714 @@ func (r *Redis) Subscribe(ctx context.Context, channels ...string) *redis.PubSub
 // Patterns can be omitted to create empty subscription.
 func (r *Redis) PSubscribe(ctx context.Context, channels ...string) *redis.PubSub {
 	return r.client.PSubscribe(ctx, channels...)
+}
+
+// ACLCat implements redis.Cmdable.
+func (r *Redis) ACLCat(ctx context.Context) *redis.StringSliceCmd {
+	return r.client.ACLCat(ctx)
+}
+
+// ACLCatArgs implements redis.Cmdable.
+func (r *Redis) ACLCatArgs(ctx context.Context, options *redis.ACLCatArgs) *redis.StringSliceCmd {
+	return r.client.ACLCatArgs(ctx, options)
+}
+
+// ACLDelUser implements redis.Cmdable.
+func (r *Redis) ACLDelUser(ctx context.Context, username string) *redis.IntCmd {
+	return r.client.ACLDelUser(ctx, username)
+}
+
+// ACLList implements redis.Cmdable.
+func (r *Redis) ACLList(ctx context.Context) *redis.StringSliceCmd {
+	return r.client.ACLList(ctx)
+}
+
+// ACLSetUser implements redis.Cmdable.
+func (r *Redis) ACLSetUser(ctx context.Context, username string, rules ...string) *redis.StatusCmd {
+	return r.client.ACLSetUser(ctx, username, rules...)
+}
+
+// BFReserveWithArgs implements redis.Cmdable.
+func (r *Redis) BFReserveWithArgs(ctx context.Context, key string, options *redis.BFReserveOptions) *redis.StatusCmd {
+	return r.client.BFReserveWithArgs(ctx, key, options)
+}
+
+// BitFieldRO implements redis.Cmdable.
+func (r *Redis) BitFieldRO(ctx context.Context, key string, values ...interface{}) *redis.IntSliceCmd {
+	return r.client.BitFieldRO(ctx, key, values...)
+}
+
+// BitOpAndOr implements redis.Cmdable.
+func (r *Redis) BitOpAndOr(ctx context.Context, destKey string, keys ...string) *redis.IntCmd {
+	return r.client.BitOpAndOr(ctx, destKey, keys...)
+}
+
+// BitOpDiff implements redis.Cmdable.
+func (r *Redis) BitOpDiff(ctx context.Context, destKey string, keys ...string) *redis.IntCmd {
+	return r.client.BitOpDiff(ctx, destKey, keys...)
+}
+
+// BitOpDiff1 implements redis.Cmdable.
+func (r *Redis) BitOpDiff1(ctx context.Context, destKey string, keys ...string) *redis.IntCmd {
+	return r.client.BitOpDiff1(ctx, destKey, keys...)
+}
+
+// BitOpOne implements redis.Cmdable.
+func (r *Redis) BitOpOne(ctx context.Context, destKey string, keys ...string) *redis.IntCmd {
+	return r.client.BitOpOne(ctx, destKey, keys...)
+}
+
+// CFReserveWithArgs implements redis.Cmdable.
+func (r *Redis) CFReserveWithArgs(ctx context.Context, key string, options *redis.CFReserveOptions) *redis.StatusCmd {
+	return r.client.CFReserveWithArgs(ctx, key, options)
+}
+
+// ClusterMyID implements redis.Cmdable.
+func (r *Redis) ClusterMyID(ctx context.Context) *redis.StringCmd {
+	return r.client.ClusterMyID(ctx)
+}
+
+// FTAggregate implements redis.Cmdable.
+func (r *Redis) FTAggregate(ctx context.Context, index string, query string) *redis.MapStringInterfaceCmd {
+	return r.client.FTAggregate(ctx, index, query)
+}
+
+// FTAggregateWithArgs implements redis.Cmdable.
+func (r *Redis) FTAggregateWithArgs(ctx context.Context, index string, query string, options *redis.FTAggregateOptions) *redis.AggregateCmd {
+	return r.client.FTAggregateWithArgs(ctx, index, query, options)
+}
+
+// FTAliasAdd implements redis.Cmdable.
+func (r *Redis) FTAliasAdd(ctx context.Context, index string, alias string) *redis.StatusCmd {
+	return r.client.FTAliasAdd(ctx, index, alias)
+}
+
+// FTAliasDel implements redis.Cmdable.
+func (r *Redis) FTAliasDel(ctx context.Context, alias string) *redis.StatusCmd {
+	return r.client.FTAliasDel(ctx, alias)
+}
+
+// FTAliasUpdate implements redis.Cmdable.
+func (r *Redis) FTAliasUpdate(ctx context.Context, index string, alias string) *redis.StatusCmd {
+	return r.client.FTAliasUpdate(ctx, index, alias)
+}
+
+// FTAlter implements redis.Cmdable.
+func (r *Redis) FTAlter(ctx context.Context, index string, skipInitialScan bool, definition []interface{}) *redis.StatusCmd {
+	return r.client.FTAlter(ctx, index, skipInitialScan, definition)
+}
+
+// FTConfigGet implements redis.Cmdable.
+func (r *Redis) FTConfigGet(ctx context.Context, option string) *redis.MapMapStringInterfaceCmd {
+	return r.client.FTConfigGet(ctx, option)
+}
+
+// FTConfigSet implements redis.Cmdable.
+func (r *Redis) FTConfigSet(ctx context.Context, option string, value interface{}) *redis.StatusCmd {
+	return r.client.FTConfigSet(ctx, option, value)
+}
+
+// FTCreate implements redis.Cmdable.
+func (r *Redis) FTCreate(ctx context.Context, index string, options *redis.FTCreateOptions, schema ...*redis.FieldSchema) *redis.StatusCmd {
+	return r.client.FTCreate(ctx, index, options, schema...)
+}
+
+// FTCursorDel implements redis.Cmdable.
+func (r *Redis) FTCursorDel(ctx context.Context, index string, cursorId int) *redis.StatusCmd {
+	return r.client.FTCursorDel(ctx, index, cursorId)
+}
+
+// FTCursorRead implements redis.Cmdable.
+func (r *Redis) FTCursorRead(ctx context.Context, index string, cursorId int, count int) *redis.MapStringInterfaceCmd {
+	return r.client.FTCursorRead(ctx, index, cursorId, count)
+}
+
+// FTDictAdd implements redis.Cmdable.
+func (r *Redis) FTDictAdd(ctx context.Context, dict string, term ...interface{}) *redis.IntCmd {
+	return r.client.FTDictAdd(ctx, dict, term...)
+}
+
+// FTDictDel implements redis.Cmdable.
+func (r *Redis) FTDictDel(ctx context.Context, dict string, term ...interface{}) *redis.IntCmd {
+	return r.client.FTDictDel(ctx, dict, term...)
+}
+
+// FTDictDump implements redis.Cmdable.
+func (r *Redis) FTDictDump(ctx context.Context, dict string) *redis.StringSliceCmd {
+	return r.client.FTDictDump(ctx, dict)
+}
+
+// FTDropIndex implements redis.Cmdable.
+func (r *Redis) FTDropIndex(ctx context.Context, index string) *redis.StatusCmd {
+	return r.client.FTDropIndex(ctx, index)
+}
+
+// FTDropIndexWithArgs implements redis.Cmdable.
+func (r *Redis) FTDropIndexWithArgs(ctx context.Context, index string, options *redis.FTDropIndexOptions) *redis.StatusCmd {
+	return r.client.FTDropIndexWithArgs(ctx, index, options)
+}
+
+// FTExplain implements redis.Cmdable.
+func (r *Redis) FTExplain(ctx context.Context, index string, query string) *redis.StringCmd {
+	return r.client.FTExplain(ctx, index, query)
+}
+
+// FTExplainWithArgs implements redis.Cmdable.
+func (r *Redis) FTExplainWithArgs(ctx context.Context, index string, query string, options *redis.FTExplainOptions) *redis.StringCmd {
+	return r.client.FTExplainWithArgs(ctx, index, query, options)
+}
+
+// FTInfo implements redis.Cmdable.
+func (r *Redis) FTInfo(ctx context.Context, index string) *redis.FTInfoCmd {
+	return r.client.FTInfo(ctx, index)
+}
+
+// FTSearch implements redis.Cmdable.
+func (r *Redis) FTSearch(ctx context.Context, index string, query string) *redis.FTSearchCmd {
+	return r.client.FTSearch(ctx, index, query)
+}
+
+// FTSearchWithArgs implements redis.Cmdable.
+func (r *Redis) FTSearchWithArgs(ctx context.Context, index string, query string, options *redis.FTSearchOptions) *redis.FTSearchCmd {
+	return r.client.FTSearchWithArgs(ctx, index, query, options)
+}
+
+// FTSpellCheck implements redis.Cmdable.
+func (r *Redis) FTSpellCheck(ctx context.Context, index string, query string) *redis.FTSpellCheckCmd {
+	return r.client.FTSpellCheck(ctx, index, query)
+}
+
+// FTSpellCheckWithArgs implements redis.Cmdable.
+func (r *Redis) FTSpellCheckWithArgs(ctx context.Context, index string, query string, options *redis.FTSpellCheckOptions) *redis.FTSpellCheckCmd {
+	return r.client.FTSpellCheckWithArgs(ctx, index, query, options)
+}
+
+// FTSynDump implements redis.Cmdable.
+func (r *Redis) FTSynDump(ctx context.Context, index string) *redis.FTSynDumpCmd {
+	return r.client.FTSynDump(ctx, index)
+}
+
+// FTSynUpdate implements redis.Cmdable.
+func (r *Redis) FTSynUpdate(ctx context.Context, index string, synGroupId interface{}, terms []interface{}) *redis.StatusCmd {
+	return r.client.FTSynUpdate(ctx, index, synGroupId, terms)
+}
+
+// FTSynUpdateWithArgs implements redis.Cmdable.
+func (r *Redis) FTSynUpdateWithArgs(ctx context.Context, index string, synGroupId interface{}, options *redis.FTSynUpdateOptions, terms []interface{}) *redis.StatusCmd {
+	return r.client.FTSynUpdateWithArgs(ctx, index, synGroupId, options, terms)
+}
+
+// FTTagVals implements redis.Cmdable.
+func (r *Redis) FTTagVals(ctx context.Context, index string, field string) *redis.StringSliceCmd {
+	return r.client.FTTagVals(ctx, index, field)
+}
+
+// FT_List implements redis.Cmdable.
+func (r *Redis) FT_List(ctx context.Context) *redis.StringSliceCmd {
+	return r.client.FT_List(ctx)
+}
+
+// HExpire implements redis.Cmdable.
+func (r *Redis) HExpire(ctx context.Context, key string, expiration time.Duration, fields ...string) *redis.IntSliceCmd {
+	panic("unimplemented")
+}
+
+// HExpireAt implements redis.Cmdable.
+func (r *Redis) HExpireAt(ctx context.Context, key string, tm time.Time, fields ...string) *redis.IntSliceCmd {
+	panic("unimplemented")
+}
+
+// HExpireAtWithArgs implements redis.Cmdable.
+func (r *Redis) HExpireAtWithArgs(ctx context.Context, key string, tm time.Time, expirationArgs redis.HExpireArgs, fields ...string) *redis.IntSliceCmd {
+	panic("unimplemented")
+}
+
+// HExpireTime implements redis.Cmdable.
+func (r *Redis) HExpireTime(ctx context.Context, key string, fields ...string) *redis.IntSliceCmd {
+	panic("unimplemented")
+}
+
+// HExpireWithArgs implements redis.Cmdable.
+func (r *Redis) HExpireWithArgs(ctx context.Context, key string, expiration time.Duration, expirationArgs redis.HExpireArgs, fields ...string) *redis.IntSliceCmd {
+	panic("unimplemented")
+}
+
+// HGetDel implements redis.Cmdable.
+func (r *Redis) HGetDel(ctx context.Context, key string, fields ...string) *redis.StringSliceCmd {
+	panic("unimplemented")
+}
+
+// HGetEX implements redis.Cmdable.
+func (r *Redis) HGetEX(ctx context.Context, key string, fields ...string) *redis.StringSliceCmd {
+	panic("unimplemented")
+}
+
+// HGetEXWithArgs implements redis.Cmdable.
+func (r *Redis) HGetEXWithArgs(ctx context.Context, key string, options *redis.HGetEXOptions, fields ...string) *redis.StringSliceCmd {
+	panic("unimplemented")
+}
+
+// HPExpire implements redis.Cmdable.
+func (r *Redis) HPExpire(ctx context.Context, key string, expiration time.Duration, fields ...string) *redis.IntSliceCmd {
+	panic("unimplemented")
+}
+
+// HPExpireAt implements redis.Cmdable.
+func (r *Redis) HPExpireAt(ctx context.Context, key string, tm time.Time, fields ...string) *redis.IntSliceCmd {
+	panic("unimplemented")
+}
+
+// HPExpireAtWithArgs implements redis.Cmdable.
+func (r *Redis) HPExpireAtWithArgs(ctx context.Context, key string, tm time.Time, expirationArgs redis.HExpireArgs, fields ...string) *redis.IntSliceCmd {
+	panic("unimplemented")
+}
+
+// HPExpireTime implements redis.Cmdable.
+func (r *Redis) HPExpireTime(ctx context.Context, key string, fields ...string) *redis.IntSliceCmd {
+	panic("unimplemented")
+}
+
+// HPExpireWithArgs implements redis.Cmdable.
+func (r *Redis) HPExpireWithArgs(ctx context.Context, key string, expiration time.Duration, expirationArgs redis.HExpireArgs, fields ...string) *redis.IntSliceCmd {
+	panic("unimplemented")
+}
+
+// HPTTL implements redis.Cmdable.
+func (r *Redis) HPTTL(ctx context.Context, key string, fields ...string) *redis.IntSliceCmd {
+	panic("unimplemented")
+}
+
+// HPersist implements redis.Cmdable.
+func (r *Redis) HPersist(ctx context.Context, key string, fields ...string) *redis.IntSliceCmd {
+	panic("unimplemented")
+}
+
+// HScanNoValues implements redis.Cmdable.
+func (r *Redis) HScanNoValues(ctx context.Context, key string, cursor uint64, match string, count int64) *redis.ScanCmd {
+	panic("unimplemented")
+}
+
+// HSetEX implements redis.Cmdable.
+func (r *Redis) HSetEX(ctx context.Context, key string, fieldsAndValues ...string) *redis.IntCmd {
+	panic("unimplemented")
+}
+
+// HSetEXWithArgs implements redis.Cmdable.
+func (r *Redis) HSetEXWithArgs(ctx context.Context, key string, options *redis.HSetEXOptions, fieldsAndValues ...string) *redis.IntCmd {
+	panic("unimplemented")
+}
+
+// HStrLen implements redis.Cmdable.
+func (r *Redis) HStrLen(ctx context.Context, key string, field string) *redis.IntCmd {
+	panic("unimplemented")
+}
+
+// HTTL implements redis.Cmdable.
+func (r *Redis) HTTL(ctx context.Context, key string, fields ...string) *redis.IntSliceCmd {
+	panic("unimplemented")
+}
+
+// JSONArrAppend implements redis.Cmdable.
+func (r *Redis) JSONArrAppend(ctx context.Context, key string, path string, values ...interface{}) *redis.IntSliceCmd {
+	panic("unimplemented")
+}
+
+// JSONArrIndex implements redis.Cmdable.
+func (r *Redis) JSONArrIndex(ctx context.Context, key string, path string, value ...interface{}) *redis.IntSliceCmd {
+	panic("unimplemented")
+}
+
+// JSONArrIndexWithArgs implements redis.Cmdable.
+func (r *Redis) JSONArrIndexWithArgs(ctx context.Context, key string, path string, options *redis.JSONArrIndexArgs, value ...interface{}) *redis.IntSliceCmd {
+	panic("unimplemented")
+}
+
+// JSONArrInsert implements redis.Cmdable.
+func (r *Redis) JSONArrInsert(ctx context.Context, key string, path string, index int64, values ...interface{}) *redis.IntSliceCmd {
+	panic("unimplemented")
+}
+
+// JSONArrLen implements redis.Cmdable.
+func (r *Redis) JSONArrLen(ctx context.Context, key string, path string) *redis.IntSliceCmd {
+	panic("unimplemented")
+}
+
+// JSONArrPop implements redis.Cmdable.
+func (r *Redis) JSONArrPop(ctx context.Context, key string, path string, index int) *redis.StringSliceCmd {
+	panic("unimplemented")
+}
+
+// JSONArrTrim implements redis.Cmdable.
+func (r *Redis) JSONArrTrim(ctx context.Context, key string, path string) *redis.IntSliceCmd {
+	panic("unimplemented")
+}
+
+// JSONArrTrimWithArgs implements redis.Cmdable.
+func (r *Redis) JSONArrTrimWithArgs(ctx context.Context, key string, path string, options *redis.JSONArrTrimArgs) *redis.IntSliceCmd {
+	panic("unimplemented")
+}
+
+// JSONClear implements redis.Cmdable.
+func (r *Redis) JSONClear(ctx context.Context, key string, path string) *redis.IntCmd {
+	panic("unimplemented")
+}
+
+// JSONDebugMemory implements redis.Cmdable.
+func (r *Redis) JSONDebugMemory(ctx context.Context, key string, path string) *redis.IntCmd {
+	panic("unimplemented")
+}
+
+// JSONDel implements redis.Cmdable.
+func (r *Redis) JSONDel(ctx context.Context, key string, path string) *redis.IntCmd {
+	panic("unimplemented")
+}
+
+// JSONForget implements redis.Cmdable.
+func (r *Redis) JSONForget(ctx context.Context, key string, path string) *redis.IntCmd {
+	panic("unimplemented")
+}
+
+// JSONGet implements redis.Cmdable.
+func (r *Redis) JSONGet(ctx context.Context, key string, paths ...string) *redis.JSONCmd {
+	panic("unimplemented")
+}
+
+// JSONGetWithArgs implements redis.Cmdable.
+func (r *Redis) JSONGetWithArgs(ctx context.Context, key string, options *redis.JSONGetArgs, paths ...string) *redis.JSONCmd {
+	panic("unimplemented")
+}
+
+// JSONMGet implements redis.Cmdable.
+func (r *Redis) JSONMGet(ctx context.Context, path string, keys ...string) *redis.JSONSliceCmd {
+	panic("unimplemented")
+}
+
+// JSONMSet implements redis.Cmdable.
+func (r *Redis) JSONMSet(ctx context.Context, params ...interface{}) *redis.StatusCmd {
+	panic("unimplemented")
+}
+
+// JSONMSetArgs implements redis.Cmdable.
+func (r *Redis) JSONMSetArgs(ctx context.Context, docs []redis.JSONSetArgs) *redis.StatusCmd {
+	panic("unimplemented")
+}
+
+// JSONMerge implements redis.Cmdable.
+func (r *Redis) JSONMerge(ctx context.Context, key string, path string, value string) *redis.StatusCmd {
+	panic("unimplemented")
+}
+
+// JSONNumIncrBy implements redis.Cmdable.
+func (r *Redis) JSONNumIncrBy(ctx context.Context, key string, path string, value float64) *redis.JSONCmd {
+	panic("unimplemented")
+}
+
+// JSONObjKeys implements redis.Cmdable.
+func (r *Redis) JSONObjKeys(ctx context.Context, key string, path string) *redis.SliceCmd {
+	panic("unimplemented")
+}
+
+// JSONObjLen implements redis.Cmdable.
+func (r *Redis) JSONObjLen(ctx context.Context, key string, path string) *redis.IntPointerSliceCmd {
+	panic("unimplemented")
+}
+
+// JSONSet implements redis.Cmdable.
+func (r *Redis) JSONSet(ctx context.Context, key string, path string, value interface{}) *redis.StatusCmd {
+	panic("unimplemented")
+}
+
+// JSONSetMode implements redis.Cmdable.
+func (r *Redis) JSONSetMode(ctx context.Context, key string, path string, value interface{}, mode string) *redis.StatusCmd {
+	panic("unimplemented")
+}
+
+// JSONStrAppend implements redis.Cmdable.
+func (r *Redis) JSONStrAppend(ctx context.Context, key string, path string, value string) *redis.IntPointerSliceCmd {
+	panic("unimplemented")
+}
+
+// JSONStrLen implements redis.Cmdable.
+func (r *Redis) JSONStrLen(ctx context.Context, key string, path string) *redis.IntPointerSliceCmd {
+	panic("unimplemented")
+}
+
+// JSONToggle implements redis.Cmdable.
+func (r *Redis) JSONToggle(ctx context.Context, key string, path string) *redis.IntPointerSliceCmd {
+	panic("unimplemented")
+}
+
+// JSONType implements redis.Cmdable.
+func (r *Redis) JSONType(ctx context.Context, key string, path string) *redis.JSONSliceCmd {
+	panic("unimplemented")
+}
+
+// ObjectFreq implements redis.Cmdable.
+func (r *Redis) ObjectFreq(ctx context.Context, key string) *redis.IntCmd {
+	panic("unimplemented")
+}
+
+// TSAdd implements redis.Cmdable.
+func (r *Redis) TSAdd(ctx context.Context, key string, timestamp interface{}, value float64) *redis.IntCmd {
+	panic("unimplemented")
+}
+
+// TSAddWithArgs implements redis.Cmdable.
+func (r *Redis) TSAddWithArgs(ctx context.Context, key string, timestamp interface{}, value float64, options *redis.TSOptions) *redis.IntCmd {
+	panic("unimplemented")
+}
+
+// TSAlter implements redis.Cmdable.
+func (r *Redis) TSAlter(ctx context.Context, key string, options *redis.TSAlterOptions) *redis.StatusCmd {
+	panic("unimplemented")
+}
+
+// TSCreate implements redis.Cmdable.
+func (r *Redis) TSCreate(ctx context.Context, key string) *redis.StatusCmd {
+	panic("unimplemented")
+}
+
+// TSCreateRule implements redis.Cmdable.
+func (r *Redis) TSCreateRule(ctx context.Context, sourceKey string, destKey string, aggregator redis.Aggregator, bucketDuration int) *redis.StatusCmd {
+	panic("unimplemented")
+}
+
+// TSCreateRuleWithArgs implements redis.Cmdable.
+func (r *Redis) TSCreateRuleWithArgs(ctx context.Context, sourceKey string, destKey string, aggregator redis.Aggregator, bucketDuration int, options *redis.TSCreateRuleOptions) *redis.StatusCmd {
+	panic("unimplemented")
+}
+
+// TSCreateWithArgs implements redis.Cmdable.
+func (r *Redis) TSCreateWithArgs(ctx context.Context, key string, options *redis.TSOptions) *redis.StatusCmd {
+	panic("unimplemented")
+}
+
+// TSDecrBy implements redis.Cmdable.
+func (r *Redis) TSDecrBy(ctx context.Context, Key string, timestamp float64) *redis.IntCmd {
+	panic("unimplemented")
+}
+
+// TSDecrByWithArgs implements redis.Cmdable.
+func (r *Redis) TSDecrByWithArgs(ctx context.Context, key string, timestamp float64, options *redis.TSIncrDecrOptions) *redis.IntCmd {
+	panic("unimplemented")
+}
+
+// TSDel implements redis.Cmdable.
+func (r *Redis) TSDel(ctx context.Context, Key string, fromTimestamp int, toTimestamp int) *redis.IntCmd {
+	panic("unimplemented")
+}
+
+// TSDeleteRule implements redis.Cmdable.
+func (r *Redis) TSDeleteRule(ctx context.Context, sourceKey string, destKey string) *redis.StatusCmd {
+	panic("unimplemented")
+}
+
+// TSGet implements redis.Cmdable.
+func (r *Redis) TSGet(ctx context.Context, key string) *redis.TSTimestampValueCmd {
+	panic("unimplemented")
+}
+
+// TSGetWithArgs implements redis.Cmdable.
+func (r *Redis) TSGetWithArgs(ctx context.Context, key string, options *redis.TSGetOptions) *redis.TSTimestampValueCmd {
+	panic("unimplemented")
+}
+
+// TSIncrBy implements redis.Cmdable.
+func (r *Redis) TSIncrBy(ctx context.Context, Key string, timestamp float64) *redis.IntCmd {
+	panic("unimplemented")
+}
+
+// TSIncrByWithArgs implements redis.Cmdable.
+func (r *Redis) TSIncrByWithArgs(ctx context.Context, key string, timestamp float64, options *redis.TSIncrDecrOptions) *redis.IntCmd {
+	panic("unimplemented")
+}
+
+// TSInfo implements redis.Cmdable.
+func (r *Redis) TSInfo(ctx context.Context, key string) *redis.MapStringInterfaceCmd {
+	panic("unimplemented")
+}
+
+// TSInfoWithArgs implements redis.Cmdable.
+func (r *Redis) TSInfoWithArgs(ctx context.Context, key string, options *redis.TSInfoOptions) *redis.MapStringInterfaceCmd {
+	panic("unimplemented")
+}
+
+// TSMAdd implements redis.Cmdable.
+func (r *Redis) TSMAdd(ctx context.Context, ktvSlices [][]interface{}) *redis.IntSliceCmd {
+	panic("unimplemented")
+}
+
+// TSMGet implements redis.Cmdable.
+func (r *Redis) TSMGet(ctx context.Context, filters []string) *redis.MapStringSliceInterfaceCmd {
+	panic("unimplemented")
+}
+
+// TSMGetWithArgs implements redis.Cmdable.
+func (r *Redis) TSMGetWithArgs(ctx context.Context, filters []string, options *redis.TSMGetOptions) *redis.MapStringSliceInterfaceCmd {
+	panic("unimplemented")
+}
+
+// TSMRange implements redis.Cmdable.
+func (r *Redis) TSMRange(ctx context.Context, fromTimestamp int, toTimestamp int, filterExpr []string) *redis.MapStringSliceInterfaceCmd {
+	panic("unimplemented")
+}
+
+// TSMRangeWithArgs implements redis.Cmdable.
+func (r *Redis) TSMRangeWithArgs(ctx context.Context, fromTimestamp int, toTimestamp int, filterExpr []string, options *redis.TSMRangeOptions) *redis.MapStringSliceInterfaceCmd {
+	panic("unimplemented")
+}
+
+// TSMRevRange implements redis.Cmdable.
+func (r *Redis) TSMRevRange(ctx context.Context, fromTimestamp int, toTimestamp int, filterExpr []string) *redis.MapStringSliceInterfaceCmd {
+	panic("unimplemented")
+}
+
+// TSMRevRangeWithArgs implements redis.Cmdable.
+func (r *Redis) TSMRevRangeWithArgs(ctx context.Context, fromTimestamp int, toTimestamp int, filterExpr []string, options *redis.TSMRevRangeOptions) *redis.MapStringSliceInterfaceCmd {
+	panic("unimplemented")
+}
+
+// TSQueryIndex implements redis.Cmdable.
+func (r *Redis) TSQueryIndex(ctx context.Context, filterExpr []string) *redis.StringSliceCmd {
+	panic("unimplemented")
+}
+
+// TSRange implements redis.Cmdable.
+func (r *Redis) TSRange(ctx context.Context, key string, fromTimestamp int, toTimestamp int) *redis.TSTimestampValueSliceCmd {
+	panic("unimplemented")
+}
+
+// TSRangeWithArgs implements redis.Cmdable.
+func (r *Redis) TSRangeWithArgs(ctx context.Context, key string, fromTimestamp int, toTimestamp int, options *redis.TSRangeOptions) *redis.TSTimestampValueSliceCmd {
+	panic("unimplemented")
+}
+
+// TSRevRange implements redis.Cmdable.
+func (r *Redis) TSRevRange(ctx context.Context, key string, fromTimestamp int, toTimestamp int) *redis.TSTimestampValueSliceCmd {
+	panic("unimplemented")
+}
+
+// TSRevRangeWithArgs implements redis.Cmdable.
+func (r *Redis) TSRevRangeWithArgs(ctx context.Context, key string, fromTimestamp int, toTimestamp int, options *redis.TSRevRangeOptions) *redis.TSTimestampValueSliceCmd {
+	panic("unimplemented")
+}
+
+// VAdd implements redis.Cmdable.
+func (r *Redis) VAdd(ctx context.Context, key string, element string, val redis.Vector) *redis.BoolCmd {
+	panic("unimplemented")
+}
+
+// VAddWithArgs implements redis.Cmdable.
+func (r *Redis) VAddWithArgs(ctx context.Context, key string, element string, val redis.Vector, addArgs *redis.VAddArgs) *redis.BoolCmd {
+	panic("unimplemented")
+}
+
+// VCard implements redis.Cmdable.
+func (r *Redis) VCard(ctx context.Context, key string) *redis.IntCmd {
+	panic("unimplemented")
+}
+
+// VClearAttributes implements redis.Cmdable.
+func (r *Redis) VClearAttributes(ctx context.Context, key string, element string) *redis.BoolCmd {
+	panic("unimplemented")
+}
+
+// VDim implements redis.Cmdable.
+func (r *Redis) VDim(ctx context.Context, key string) *redis.IntCmd {
+	panic("unimplemented")
+}
+
+// VEmb implements redis.Cmdable.
+func (r *Redis) VEmb(ctx context.Context, key string, element string, raw bool) *redis.SliceCmd {
+	panic("unimplemented")
+}
+
+// VGetAttr implements redis.Cmdable.
+func (r *Redis) VGetAttr(ctx context.Context, key string, element string) *redis.StringCmd {
+	panic("unimplemented")
+}
+
+// VInfo implements redis.Cmdable.
+func (r *Redis) VInfo(ctx context.Context, key string) *redis.MapStringInterfaceCmd {
+	panic("unimplemented")
+}
+
+// VLinks implements redis.Cmdable.
+func (r *Redis) VLinks(ctx context.Context, key string, element string) *redis.StringSliceCmd {
+	panic("unimplemented")
+}
+
+// VLinksWithScores implements redis.Cmdable.
+func (r *Redis) VLinksWithScores(ctx context.Context, key string, element string) *redis.VectorScoreSliceCmd {
+	panic("unimplemented")
+}
+
+// VRandMember implements redis.Cmdable.
+func (r *Redis) VRandMember(ctx context.Context, key string) *redis.StringCmd {
+	panic("unimplemented")
+}
+
+// VRandMemberCount implements redis.Cmdable.
+func (r *Redis) VRandMemberCount(ctx context.Context, key string, count int) *redis.StringSliceCmd {
+	panic("unimplemented")
+}
+
+// VRem implements redis.Cmdable.
+func (r *Redis) VRem(ctx context.Context, key string, element string) *redis.BoolCmd {
+	panic("unimplemented")
+}
+
+// VSetAttr implements redis.Cmdable.
+func (r *Redis) VSetAttr(ctx context.Context, key string, element string, attr interface{}) *redis.BoolCmd {
+	panic("unimplemented")
+}
+
+// VSim implements redis.Cmdable.
+func (r *Redis) VSim(ctx context.Context, key string, val redis.Vector) *redis.StringSliceCmd {
+	panic("unimplemented")
+}
+
+// VSimWithArgs implements redis.Cmdable.
+func (r *Redis) VSimWithArgs(ctx context.Context, key string, val redis.Vector, args *redis.VSimArgs) *redis.StringSliceCmd {
+	panic("unimplemented")
+}
+
+// VSimWithArgsWithScores implements redis.Cmdable.
+func (r *Redis) VSimWithArgsWithScores(ctx context.Context, key string, val redis.Vector, args *redis.VSimArgs) *redis.VectorScoreSliceCmd {
+	panic("unimplemented")
+}
+
+// VSimWithScores implements redis.Cmdable.
+func (r *Redis) VSimWithScores(ctx context.Context, key string, val redis.Vector) *redis.VectorScoreSliceCmd {
+	panic("unimplemented")
+}
+
+// XAckDel implements redis.Cmdable.
+func (r *Redis) XAckDel(ctx context.Context, stream string, group string, mode string, ids ...string) *redis.SliceCmd {
+	panic("unimplemented")
+}
+
+// XDelEx implements redis.Cmdable.
+func (r *Redis) XDelEx(ctx context.Context, stream string, mode string, ids ...string) *redis.SliceCmd {
+	panic("unimplemented")
+}
+
+// XTrimMaxLenApproxMode implements redis.Cmdable.
+func (r *Redis) XTrimMaxLenApproxMode(ctx context.Context, key string, maxLen int64, limit int64, mode string) *redis.IntCmd {
+	panic("unimplemented")
+}
+
+// XTrimMaxLenMode implements redis.Cmdable.
+func (r *Redis) XTrimMaxLenMode(ctx context.Context, key string, maxLen int64, mode string) *redis.IntCmd {
+	panic("unimplemented")
+}
+
+// XTrimMinIDApproxMode implements redis.Cmdable.
+func (r *Redis) XTrimMinIDApproxMode(ctx context.Context, key string, minID string, limit int64, mode string) *redis.IntCmd {
+	panic("unimplemented")
+}
+
+// XTrimMinIDMode implements redis.Cmdable.
+func (r *Redis) XTrimMinIDMode(ctx context.Context, key string, minID string, mode string) *redis.IntCmd {
+	return r.client.XTrimMinIDMode(ctx, key, minID, mode)
 }
