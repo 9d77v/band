@@ -12,7 +12,6 @@ import (
 // params
 var (
 	pkgDir  string
-	appName string
 	service string
 	entity  string
 	idType  string
@@ -38,9 +37,8 @@ func Execute() {
 }
 
 func init() {
-	initCommand.Flags().StringVarP(&pkgDir, "pkg", "p", "", "go package name")
-	initCommand.Flags().StringVarP(&appName, "app", "a", "", "app name")
 	rootCmd.AddCommand(initCommand)
+	serviceCommand.Flags().StringVarP(&pkgDir, "pkg", "p", "", "go package name")
 	serviceCommand.Flags().StringVarP(&service, "service", "s", "", "service name")
 	serviceCommand.Flags().StringVarP(&entity, "entity", "e", "", "entity name")
 	serviceCommand.Flags().StringVarP(&idType, "id_type", "t", "uint", "id type")

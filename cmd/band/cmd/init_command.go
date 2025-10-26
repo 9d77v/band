@@ -12,7 +12,6 @@ import (
 	"text/template"
 
 	"github.com/9d77v/band/cmd/band/tpls"
-	"github.com/9d77v/band/pkg/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -21,16 +20,11 @@ var initCommand = &cobra.Command{
 	Short: "init a web server",
 	Long:  `init a web server`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("begin init project")
-		if utils.FileExist("go.mod") {
-			fmt.Println("project created")
-			return
-		}
+		fmt.Println("start init project")
 		initProject()
-		execCmd("go", "mod", "init", pkgDir)
 		execCmd("make", "init")
 		handleEnvFile()
-		fmt.Println("end init project")
+		fmt.Println("init project success")
 	},
 }
 
@@ -73,27 +67,17 @@ const (
 )
 
 type ServerTpl struct {
-	PKG_DIR  string
 	APP_NAME string
 }
 
 // initProject 项目初始化
 func initProject() {
-	if len(appName) == 0 {
-		if len(pkgDir) != 0 {
-			arr := strings.Split(pkgDir, "/")
-			appName = arr[len(arr)-1]
-		} else {
-			panic("项目名称不能为空")
-		}
-	}
 	dirs, err := tpls.ServerFiles.ReadDir(serverDir)
 	if err != nil {
 		log.Println("打开server文件夹失败", err)
 	}
 	serverTpl := &ServerTpl{
-		PKG_DIR:  pkgDir,
-		APP_NAME: appName,
+		APP_NAME: "",
 	}
 	walkServerDir(serverTpl, "./", serverDir, dirs)
 }

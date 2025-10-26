@@ -2,14 +2,13 @@ package persistence
 
 import (
 	"context"
-	"errors"
 
 	"github.com/9d77v/band/pkg/stores/orm"
 	"github.com/9d77v/band/pkg/stores/orm/base"
 	"github.com/9d77v/band/pkg/stores/orm/impl/postgres"
-	"{{.PKG_DIR}}/apps/{{.SERVICE_PACKAGE}}/domain/entity"
-	"{{.PKG_DIR}}/apps/{{.SERVICE_PACKAGE}}/domain/repository"
-	"{{.PKG_DIR}}/apps/{{.SERVICE_PACKAGE}}/infrastructure/persistence/do"
+	"{{.PKG_DIR}}/domain/entity"
+	"{{.PKG_DIR}}/domain/repository"
+	"{{.PKG_DIR}}/infrastructure/persistence/postgres/do"
 
 	"gorm.io/gorm"
 )
@@ -63,28 +62,15 @@ func (r *{{.SERVICE_UPPER}}RepositoryImpl) Get{{.ENTITY_UPPER}}ByID(ctx context.
 
 // SoftDelete{{.ENTITY_UPPER}} implements repository.{{.SERVICE_UPPER}}Repository.
 func (r *{{.SERVICE_UPPER}}RepositoryImpl) SoftDelete{{.ENTITY_UPPER}}ByIDs(ctx context.Context, ids ...int64) error {
-	db := r.DB.WithContext(ctx)
-	var err error
 	if len(ids) == 0 {
-		err = errors.New("id cannot be empty")
-	} else if len(ids) == 1 {
+        return nil
+    }
+    db := r.DB.WithContext(ctx)
+	var err error
+	if len(ids) == 1 {
 		err = db.Where("id = ?", ids[0]).Delete(&do.{{.ENTITY_UPPER}}{}).Error()
 	} else {
 		err = db.Where("id in ?", ids).Delete(&do.{{.ENTITY_UPPER}}{}).Error()
-	}
-	return err
-}
-
-// Delete{{.ENTITY_UPPER}} implements repository.{{.SERVICE_UPPER}}Repository.
-func (r *{{.SERVICE_UPPER}}RepositoryImpl) Delete{{.ENTITY_UPPER}}ByIDs(ctx context.Context, ids ...int64) error {
-	db := r.DB.WithContext(ctx)
-	var err error
-	if len(ids) == 0 {
-		err = errors.New("id cannot be empty")
-	} else if len(ids) == 1 {
-		err = db.Unscoped().Where("id = ?", ids[0]).Delete(&do.{{.ENTITY_UPPER}}{}).Error()
-	} else {
-		err = db.Unscoped().Where("id in ?", ids).Delete(&do.{{.ENTITY_UPPER}}{}).Error()
 	}
 	return err
 }

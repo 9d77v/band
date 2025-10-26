@@ -19,9 +19,7 @@ var serviceCommand = &cobra.Command{
 	Short: "init a service module",
 	Long:  `init a service module`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Start add service")
-		initService()
-		fmt.Println("Ends add service")
+		addNewService()
 	},
 }
 
@@ -40,15 +38,15 @@ type ServiceTpl struct {
 	ID_TYPE         string
 }
 
-// initService
-func initService() {
-	moduleName := util.GetGoModule("")
-	if len(pkgDir) == 0 {
-		if len(moduleName) != 0 {
-			pkgDir = moduleName
-		} else {
-			panic("module name can not be empty")
-		}
+// addNewService
+func addNewService() {
+	if service == "" {
+		log.Fatalln("service name is required")
+	}
+	path := "./apps/" + service
+	if utils.FileExist(path) {
+		log.Println("service already exists")
+		return
 	}
 	serviceDir := serviceDir
 	dirs, err := tpls.ServiceFiles.ReadDir(serviceDir)
@@ -75,9 +73,13 @@ func initService() {
 	}
 	os.MkdirAll(servicelocalDir, os.ModePerm)
 	walkServiceDir(serviceTpl, servicelocalDir, serviceDir, dirs)
+	fmt.Println("copy service files finished")
 	handleServiceProto(serviceTpl)
-	handleServiceCmd(serviceTpl)
-	fmt.Println("add service finished")
+	fmt.Println("generate service proto finished")
+	execCmd("make", `init-`+service)
+	fmt.Println("init service finished")
+	execCmd("make", `wire-`+service)
+	fmt.Println("wire service finished")
 }
 
 func walkServiceDir(tpl *ServiceTpl, localDir, serverDir string, dirs []fs.DirEntry) {
@@ -118,7 +120,7 @@ func walkServiceDir(tpl *ServiceTpl, localDir, serverDir string, dirs []fs.DirEn
 }
 
 func handleServiceProto(tpl *ServiceTpl) {
-	protoDir := "./proto/" + service + "pb"
+	protoDir := "./api/protobuf/" + service + "pb"
 	os.MkdirAll(protoDir, os.ModePerm)
 	fd, err := tpls.ProtoFiles.ReadFile("proto/example.proto.tpl")
 	if err != nil {
@@ -132,33 +134,22 @@ func handleServiceProto(tpl *ServiceTpl) {
 	}
 	defer file.Close()
 
-	if _, err = file.WriteString(`protoc-` + service + `: proto/` + service + `pb/*.proto
-	protoc -I./proto/` + service + `pb \
+	if _, err = file.WriteString(`protoc-` + service + `: api/protobuf/` + service + `pb/*.proto
+	protoc -I./api/protobuf/` + service + `pb \
 	--go_out=. \
 	--go-grpc_out=require_unimplemented_servers=false:. \
-	proto/` + service + `pb/*.proto
+	api/protobuf/` + service + `pb/*.proto
+init-` + service + `:
+	cd apps/` + service + ` && go mod init ` + pkgDir + `
+	go work use apps/` + service + `
+	cd apps/` + service + ` && go mod tidy
 wire-` + service + `:
-	cd cmd/apps/` + service + `-service && wire gen && mv wire.go wire.go.back && cd ../../../
-` + service + `-service:
-	go run cmd/apps/` + service + `-service/*.go`); err != nil {
+	cd apps/` + service + `/cmd/server && wire gen && mv wire.go wire.go.back
+dev-` + service + `:
+	go run apps/` + service + `/cmd/server/*.go`); err != nil {
 		panic(err)
 	}
 	execCmd("make", `protoc-`+service)
-}
-
-func handleServiceCmd(tpl *ServiceTpl) {
-	cmdDir := "./cmd/apps/" + service + "-service"
-	os.MkdirAll(cmdDir, os.ModePerm)
-	files := []string{"main.go", "wire.go"}
-	for _, v := range files {
-		fd, err := tpls.CmdFiles.ReadFile("cmd/" + v + ".tpl")
-		if err != nil {
-			log.Println("open", v+".tpl", "file failed:", err)
-		}
-		fileName := cmdDir + "/" + v
-		writeTplFile(tpl, fd, fileName)
-	}
-	execCmd("make", `wire-`+service)
 }
 
 func writeTplFile(tpl *ServiceTpl, fd []byte, fileName string) {

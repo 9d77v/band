@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/9d77v/band/pkg/stores/orm/base"
-	"{{.PKG_DIR}}/apps/{{.SERVICE_PACKAGE}}/domain/entity"
+	"{{.PKG_DIR}}/domain/entity"
 )
 
 type {{.SERVICE_UPPER}}RepoTxFunc = func(ctx context.Context, repo {{.SERVICE_UPPER}}Repository) error
@@ -16,5 +16,4 @@ type {{.SERVICE_UPPER}}Repository interface {
 	Create{{.ENTITY_UPPER}}(ctx context.Context, in *entity.{{.ENTITY_UPPER}}) (*entity.{{.ENTITY_UPPER}}, error)
 	Update{{.ENTITY_UPPER}}ByID(ctx context.Context, in *entity.{{.ENTITY_UPPER}}) (*entity.{{.ENTITY_UPPER}}, error)
 	SoftDelete{{.ENTITY_UPPER}}ByIDs(ctx context.Context, ids ...int64) error
-	Delete{{.ENTITY_UPPER}}ByIDs(ctx context.Context, ids ...int64) error
 }

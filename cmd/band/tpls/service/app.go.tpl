@@ -2,7 +2,7 @@ package {{.SERVICE_PACKAGE}}
 
 import (
 	"github.com/9d77v/band/pkg/app"
-	{{.SERVICE_LOWER}}pb "{{.PKG_DIR}}/proto/{{.SERVICE_PACKAGE}}pb"
+	{{.SERVICE_LOWER}}pb "api/protobuf/{{.SERVICE_PACKAGE}}pb"
 	"google.golang.org/grpc"
 )
 
