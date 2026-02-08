@@ -40,4 +40,5 @@ func Init() {
 		Level: level,
 	}))
 	slog.SetDefault(Logger)
+	slog.Info("log init success")
 }

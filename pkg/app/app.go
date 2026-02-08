@@ -81,6 +81,7 @@ func (a *App) StartGrpcServer(register func(srv *grpc.Server), opt ...grpc.Serve
 	register(srv)
 	a.Register()
 	go func() {
+		log.Printf("visit tcp://%s:%d/", a.ServerHost, a.ServerPort)
 		errc <- srv.Serve(lis)
 	}()
 	log.Printf("exiting (%v)", <-errc)
@@ -100,8 +101,8 @@ func (a *App) StartHttpServer(handler http.Handler) {
 		Handler: handler,
 	}
 	go func() {
+		log.Printf("visit http://%s:%d/", a.ServerHost, a.ServerPort)
 		errc <- srv.ListenAndServe()
-		log.Printf("connect to http://localhost:%d/", a.ServerPort)
 	}()
 	log.Printf("exiting (%v)", <-errc)
 	srvCtx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
