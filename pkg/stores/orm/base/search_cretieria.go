@@ -35,8 +35,8 @@ type SearchCriteria struct {
 }
 
 type OrFuzzyField struct {
-	Names []string    `json:"names"` //查询字段名称
-	Value interface{} `json:"value"` //查询字段值
+	Names []string `json:"names"` //查询字段名称
+	Value any      `json:"value"` //查询字段值
 }
 
 func NewSearchCriteriaOfPageQuery(query PageQuery) *SearchCriteria {
@@ -61,8 +61,8 @@ func NewJoinSearchCriteriaOfPageQuery(query PageQuery, columns, table string, jo
 }
 
 // 构建interface数组
-func BuildArray[T any](data []T) []interface{} {
-	values := []interface{}{}
+func BuildArray[T any](data []T) []any {
+	values := []any{}
 	for _, v := range data {
 		values = append(values, v)
 	}
@@ -140,7 +140,7 @@ func (sc *SearchCriteria) BuildDB(db *gorm.DB) *gorm.DB {
 	}
 	for _, fuzzy := range sc.OrFuzzys {
 		orArr := []string{}
-		values := []interface{}{}
+		values := []any{}
 		for _, v := range fuzzy.Names {
 			orArr = append(orArr, " "+v+" like ? ")
 			values = append(values, "%"+fuzzy.Value.(string)+"%")
@@ -156,7 +156,7 @@ type RawSearchCriteria struct {
 	CountSql  string
 	Where     []string
 	OrderSql  string
-	Values    []interface{}
+	Values    []any
 	PageQuery
 }
 

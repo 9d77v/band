@@ -34,7 +34,7 @@ func (r *FreeCache) Get(ctx context.Context, key string) (string, error) {
 	err = decoder.Decode(&value)
 	return value, err
 }
-func (r *FreeCache) Set(ctx context.Context, key string, value interface{}, expiration time.Duration) error {
+func (r *FreeCache) Set(ctx context.Context, key string, value any, expiration time.Duration) error {
 	var buffer bytes.Buffer
 	encoder := gob.NewEncoder(&buffer)
 	err := encoder.Encode(value)

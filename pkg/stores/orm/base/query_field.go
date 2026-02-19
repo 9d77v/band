@@ -1,18 +1,18 @@
 package base
 
 type FuzzyField struct {
-	Name  string      `json:"name"`  //查询字段名称
-	Value interface{} `json:"value"` //查询字段值
+	Name  string `json:"name"`  //查询字段名称
+	Value any    `json:"value"` //查询字段值
 }
 
 type TermField struct {
-	Name  string        `json:"name"`  //查询字段名称
-	Value []interface{} `json:"value"` //查询字段值
+	Name  string `json:"name"`  //查询字段名称
+	Value []any  `json:"value"` //查询字段值
 }
 
 type PreloadField struct {
 	Name string
-	Args []interface{}
+	Args []any
 }
 
 type NotNullField struct {
@@ -40,15 +40,15 @@ type GTEField struct {
 }
 
 type JSONFuzzyField struct {
-	Field string      `json:"field"` //json字段名
-	Name  string      `json:"name"`  //查询字段名称
-	Value interface{} `json:"value"` //查询字段值
+	Field string `json:"field"` //json字段名
+	Name  string `json:"name"`  //查询字段名称
+	Value any    `json:"value"` //查询字段值
 }
 
 type JSONTermField struct {
-	Field string        `json:"field"` //json字段名
-	Name  string        `json:"name"`  //查询字段名称
-	Value []interface{} `json:"value"` //查询字段值
+	Field string `json:"field"` //json字段名
+	Name  string `json:"name"`  //查询字段名称
+	Value []any  `json:"value"` //查询字段值
 }
 
 type JSONLTField struct {

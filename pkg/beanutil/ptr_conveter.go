@@ -7,7 +7,3 @@ func ToValue[T any](s *T) T {
 	var t T
 	return t
 }
-
-func ToPointer[T any](s T) *T {
-	return &s
-}

@@ -23,7 +23,7 @@ func NewSMS(conf sms.Conf) (*SMS, error) {
 		AccessKeyId:     &conf.AccessKey,
 		AccessKeySecret: &conf.SecretKey,
 	}
-	config.Endpoint = tea.String("dysmsapi.aliyuncs.com")
+	config.Endpoint = new("dysmsapi.aliyuncs.com")
 	client, err := dysmsapi20170525.NewClient(config)
 	if err != nil {
 		log.Fatalln(err)
@@ -34,7 +34,7 @@ func NewSMS(conf sms.Conf) (*SMS, error) {
 	}, err
 }
 
-func (s *SMS) SendSms(phoneNumbers, captcha string) (smsResp map[string]interface{}, err error) {
+func (s *SMS) SendSms(phoneNumbers, captcha string) (smsResp map[string]any, err error) {
 	templateParam := fmt.Sprintf("{\"code\":\"%s\"}", captcha)
 	templateCode := s.conf.ForeignTemplateCode
 	if strings.HasPrefix(phoneNumbers, "+86") {
@@ -64,7 +64,7 @@ func (s *SMS) SendSms(phoneNumbers, captcha string) (smsResp map[string]interfac
 		if _t, ok := tryErr.(*tea.SDKError); ok {
 			error = _t
 		} else {
-			error.Message = tea.String(tryErr.Error())
+			error.Message = new(tryErr.Error())
 		}
 		_, err := util.AssertAsString(error.Message)
 		if err != nil {

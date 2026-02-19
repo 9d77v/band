@@ -88,22 +88,22 @@ func (db *PgDB) GetDB() *gorm.DB {
 }
 
 // Set store value with key into current db instance's context
-func (db *PgDB) Set(key string, value interface{}) orm.DB {
+func (db *PgDB) Set(key string, value any) orm.DB {
 	return FromDB(db.db.Set(key, value), db.conf)
 }
 
 // Get get value with key from current db instance's context
-func (db *PgDB) Get(key string) (interface{}, bool) {
+func (db *PgDB) Get(key string) (any, bool) {
 	return db.db.Get(key)
 }
 
 // InstanceSet store value with key into current db instance's context
-func (db *PgDB) InstanceSet(key string, value interface{}) orm.DB {
+func (db *PgDB) InstanceSet(key string, value any) orm.DB {
 	return FromDB(db.db.InstanceSet(key, value), db.conf)
 }
 
 // InstanceGet get value with key from current db instance's context
-func (db *PgDB) InstanceGet(key string) (interface{}, bool) {
+func (db *PgDB) InstanceGet(key string) (any, bool) {
 	return db.db.InstanceGet(key)
 }
 
@@ -118,7 +118,7 @@ func (db *PgDB) DB() (*sql.DB, error) {
 }
 
 // SetupJoinTable setup join table schema
-func (db *PgDB) SetupJoinTable(model interface{}, field string, joinTable interface{}) error {
+func (db *PgDB) SetupJoinTable(model any, field string, joinTable any) error {
 	return db.db.SetupJoinTable(model, field, joinTable)
 }
 
@@ -137,7 +137,7 @@ func (db *PgDB) ToSQL(queryFn func(tx *gorm.DB) *gorm.DB) string {
 //	db.Model(&User{}).Update("name", "hello")
 //	// if user's primary key is non-blank, will use it as condition, then will only update the user's name to `hello`
 //	db.Model(&user).Update("name", "hello")
-func (db *PgDB) Model(value interface{}) orm.DB {
+func (db *PgDB) Model(value any) orm.DB {
 	return FromDB(db.db.Model(value), db.conf)
 }
 
@@ -147,17 +147,17 @@ func (db *PgDB) Clauses(conds ...clause.Expression) orm.DB {
 }
 
 // Table specify the table you would like to run db operations
-func (db *PgDB) Table(name string, args ...interface{}) orm.DB {
+func (db *PgDB) Table(name string, args ...any) orm.DB {
 	return FromDB(db.db.Table(name, args...), db.conf)
 }
 
 // Distinct specify distinct fields that you want querying
-func (db *PgDB) Distinct(args ...interface{}) orm.DB {
+func (db *PgDB) Distinct(args ...any) orm.DB {
 	return FromDB(db.db.Distinct(args...), db.conf)
 }
 
 // Select specify fields that you want when querying, creating, updating
-func (db *PgDB) Select(query interface{}, args ...interface{}) orm.DB {
+func (db *PgDB) Select(query any, args ...any) orm.DB {
 	return FromDB(db.db.Select(query, args...), db.conf)
 }
 
@@ -167,17 +167,17 @@ func (db *PgDB) Omit(columns ...string) orm.DB {
 }
 
 // Where add conditions
-func (db *PgDB) Where(query interface{}, args ...interface{}) orm.DB {
+func (db *PgDB) Where(query any, args ...any) orm.DB {
 	return FromDB(db.db.Where(query, args...), db.conf)
 }
 
 // Not add NOT conditions
-func (db *PgDB) Not(query interface{}, args ...interface{}) orm.DB {
+func (db *PgDB) Not(query any, args ...any) orm.DB {
 	return FromDB(db.db.Not(query, args...), db.conf)
 }
 
 // Or add OR conditions
-func (db *PgDB) Or(query interface{}, args ...interface{}) orm.DB {
+func (db *PgDB) Or(query any, args ...any) orm.DB {
 	return FromDB(db.db.Or(query, args...), db.conf)
 }
 
@@ -186,7 +186,7 @@ func (db *PgDB) Or(query interface{}, args ...interface{}) orm.DB {
 //	db.Joins("Account").Find(&user)
 //	db.Joins("JOIN emails ON emails.user_id = users.id AND emails.email = ?", "jinzhu@example.org").Find(&user)
 //	db.Joins("Account", DB.Select("id").Where("user_id = users.id AND name = ?", "someName").Model(&Account{}))
-func (db *PgDB) Joins(query string, args ...interface{}) orm.DB {
+func (db *PgDB) Joins(query string, args ...any) orm.DB {
 	return FromDB(db.db.Joins(query, args...), db.conf)
 }
 
@@ -196,7 +196,7 @@ func (db *PgDB) Group(name string) orm.DB {
 }
 
 // Having specify HAVING conditions for GROUP BY
-func (db *PgDB) Having(query interface{}, args ...interface{}) orm.DB {
+func (db *PgDB) Having(query any, args ...any) orm.DB {
 	return FromDB(db.db.Having(query, args...), db.conf)
 }
 
@@ -204,7 +204,7 @@ func (db *PgDB) Having(query interface{}, args ...interface{}) orm.DB {
 //
 //	db.Order("name DESC")
 //	db.Order(clause.OrderByColumn{Column: clause.Column{Name: "name"}, Desc: true})
-func (db *PgDB) Order(value interface{}) orm.DB {
+func (db *PgDB) Order(value any) orm.DB {
 	return FromDB(db.db.Order(value), db.conf)
 }
 
@@ -238,15 +238,15 @@ func (db *PgDB) Scopes(funcs ...func(db *gorm.DB) *gorm.DB) orm.DB {
 // Preload preload associations with given conditions
 //
 //	db.Preload("Orders", "state NOT IN (?)", "cancelled").Find(&users)
-func (db *PgDB) Preload(query string, args ...interface{}) orm.DB {
+func (db *PgDB) Preload(query string, args ...any) orm.DB {
 	return FromDB(db.db.Preload(query, args...), db.conf)
 }
 
-func (db *PgDB) Attrs(attrs ...interface{}) orm.DB {
+func (db *PgDB) Attrs(attrs ...any) orm.DB {
 	return FromDB(db.db.Attrs(attrs...), db.conf)
 }
 
-func (db *PgDB) Assign(attrs ...interface{}) orm.DB {
+func (db *PgDB) Assign(attrs ...any) orm.DB {
 	return FromDB(db.db.Assign(attrs...), db.conf)
 }
 
@@ -254,7 +254,7 @@ func (db *PgDB) Unscoped() orm.DB {
 	return FromDB(db.db.Unscoped(), db.conf)
 }
 
-func (db *PgDB) Raw(sql string, values ...interface{}) orm.DB {
+func (db *PgDB) Raw(sql string, values ...any) orm.DB {
 	return FromDB(db.db.Raw(sql, values...), db.conf)
 }
 
@@ -263,75 +263,75 @@ func (db *PgDB) Error() error {
 }
 
 // Create insert the value into database
-func (db *PgDB) Create(value interface{}) orm.DB {
+func (db *PgDB) Create(value any) orm.DB {
 	return FromDB(db.db.Create(value), db.conf)
 }
 
 // CreateInBatches insert the value in batches into database
-func (db *PgDB) CreateInBatches(value interface{}, batchSize int) orm.DB {
+func (db *PgDB) CreateInBatches(value any, batchSize int) orm.DB {
 	return FromDB(db.db.CreateInBatches(value, batchSize), db.conf)
 }
 
 // Save update value in database, if the value doesn't have primary key, will insert it
-func (db *PgDB) Save(value interface{}) orm.DB {
+func (db *PgDB) Save(value any) orm.DB {
 	return FromDB(db.db.Save(value), db.conf)
 }
 
 // First find first record that match given conditions, order by primary key
-func (db *PgDB) First(dest interface{}, conds ...interface{}) orm.DB {
+func (db *PgDB) First(dest any, conds ...any) orm.DB {
 	return FromDB(db.db.First(dest, conds...), db.conf)
 }
 
 // Take return a record that match given conditions, the order will depend on the database implementation
-func (db *PgDB) Take(dest interface{}, conds ...interface{}) orm.DB {
+func (db *PgDB) Take(dest any, conds ...any) orm.DB {
 	return FromDB(db.db.Take(dest, conds...), db.conf)
 }
 
 // Last find last record that match given conditions, order by primary key
-func (db *PgDB) Last(dest interface{}, conds ...interface{}) orm.DB {
+func (db *PgDB) Last(dest any, conds ...any) orm.DB {
 	return FromDB(db.db.Last(dest, conds...), db.conf)
 }
 
 // Find find records that match given conditions
-func (db *PgDB) Find(dest interface{}, conds ...interface{}) orm.DB {
+func (db *PgDB) Find(dest any, conds ...any) orm.DB {
 	return FromDB(db.db.Find(dest, conds...), db.conf)
 }
 
 // FindInBatches find records in batches
-func (db *PgDB) FindInBatches(dest interface{}, batchSize int, fc func(tx *gorm.DB, batch int) error) orm.DB {
+func (db *PgDB) FindInBatches(dest any, batchSize int, fc func(tx *gorm.DB, batch int) error) orm.DB {
 	return FromDB(db.db.FindInBatches(dest, batchSize, fc), db.conf)
 }
 
 // FirstOrInit gets the first matched record or initialize a new instance with given conditions (only works with struct or map conditions)
-func (db *PgDB) FirstOrInit(dest interface{}, conds ...interface{}) orm.DB {
+func (db *PgDB) FirstOrInit(dest any, conds ...any) orm.DB {
 	return FromDB(db.db.FirstOrInit(dest, conds...), db.conf)
 }
 
 // FirstOrCreate gets the first matched record or create a new one with given conditions (only works with struct, map conditions)
-func (db *PgDB) FirstOrCreate(dest interface{}, conds ...interface{}) orm.DB {
+func (db *PgDB) FirstOrCreate(dest any, conds ...any) orm.DB {
 	return FromDB(db.db.FirstOrCreate(dest, conds...), db.conf)
 }
 
 // Update update attributes with callbacks, refer: https://gorm.io/docs/update.html#Update-Changed-Fields
-func (db *PgDB) Update(column string, value interface{}) orm.DB {
+func (db *PgDB) Update(column string, value any) orm.DB {
 	return FromDB(db.db.Update(column, value), db.conf)
 }
 
 // Updates update attributes with callbacks, refer: https://gorm.io/docs/update.html#Update-Changed-Fields
-func (db *PgDB) Updates(values interface{}) orm.DB {
+func (db *PgDB) Updates(values any) orm.DB {
 	return FromDB(db.db.Updates(values), db.conf)
 }
 
-func (db *PgDB) UpdateColumn(column string, value interface{}) orm.DB {
+func (db *PgDB) UpdateColumn(column string, value any) orm.DB {
 	return FromDB(db.db.UpdateColumn(column, value), db.conf)
 }
 
-func (db *PgDB) UpdateColumns(values interface{}) orm.DB {
+func (db *PgDB) UpdateColumns(values any) orm.DB {
 	return FromDB(db.db.UpdateColumns(values), db.conf)
 }
 
 // Delete delete value match given conditions, if the value has primary key, then will including the primary key as condition
-func (db *PgDB) Delete(value interface{}, conds ...interface{}) orm.DB {
+func (db *PgDB) Delete(value any, conds ...any) orm.DB {
 	return FromDB(db.db.Delete(value, conds...), db.conf)
 }
 
@@ -348,7 +348,7 @@ func (db *PgDB) Rows() (*sql.Rows, error) {
 }
 
 // Scan scan value to a struct
-func (db *PgDB) Scan(dest interface{}) orm.DB {
+func (db *PgDB) Scan(dest any) orm.DB {
 	return FromDB(db.db.Scan(dest), db.conf)
 }
 
@@ -356,11 +356,11 @@ func (db *PgDB) Scan(dest interface{}) orm.DB {
 //
 //	var ages []int64
 //	db.Model(&users).Pluck("age", &ages)
-func (db *PgDB) Pluck(column string, dest interface{}) orm.DB {
+func (db *PgDB) Pluck(column string, dest any) orm.DB {
 	return FromDB(db.db.Pluck(column, dest), db.conf)
 }
 
-func (db *PgDB) ScanRows(rows *sql.Rows, dest interface{}) error {
+func (db *PgDB) ScanRows(rows *sql.Rows, dest any) error {
 	return db.db.ScanRows(rows, dest)
 }
 
@@ -398,7 +398,7 @@ func (db *PgDB) RollbackTo(name string) orm.DB {
 }
 
 // Exec execute raw sql
-func (db *PgDB) Exec(sql string, values ...interface{}) orm.DB {
+func (db *PgDB) Exec(sql string, values ...any) orm.DB {
 	return FromDB(db.db.Exec(sql, values...), db.conf)
 }
 
@@ -406,7 +406,7 @@ func (db *PgDB) Migrator() gorm.Migrator {
 	return db.db.Migrator()
 }
 
-func (db *PgDB) AutoMigrate(dst ...interface{}) error {
+func (db *PgDB) AutoMigrate(dst ...any) error {
 	return db.db.AutoMigrate(dst...)
 }
 

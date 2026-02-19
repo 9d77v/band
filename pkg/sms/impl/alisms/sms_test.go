@@ -24,7 +24,7 @@ func TestSMS_SendSms(t *testing.T) {
 		name        string
 		s           *SMS
 		args        args
-		wantSmsResp map[string]interface{}
+		wantSmsResp map[string]any
 		wantErr     bool
 	}{
 		{"", sms, args{"+86XXXXXXXXXX", "111121"}, nil, false},

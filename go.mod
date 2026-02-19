@@ -1,6 +1,6 @@
 module github.com/9d77v/band
 
-go 1.25.6
+go 1.26.0
 
 require (
 	github.com/alibabacloud-go/darabonba-openapi/v2 v2.0.10
@@ -18,7 +18,7 @@ require (
 	google.golang.org/grpc v1.75.1
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1
 	gorm.io/driver/postgres v1.6.0
-	gorm.io/gorm v1.31.0
+	gorm.io/gorm v1.31.1
 )
 
 require (

@@ -13,7 +13,7 @@ func GetNetworkIp() string {
 		return ""
 	}
 
-	for i := 0; i < len(netInterfaces); i++ {
+	for i := range netInterfaces {
 		if (netInterfaces[i].Flags & net.FlagUp) != 0 {
 			addrs, _ := netInterfaces[i].Addrs()
 			for _, address := range addrs {

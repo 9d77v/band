@@ -6,10 +6,11 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"maps"
 	"reflect"
 )
 
-func ConvertObject(dst, src interface{}) (err error) {
+func ConvertObject(dst, src any) (err error) {
 	defer func() {
 		if e := recover(); e != nil {
 			err = fmt.Errorf("%v", e)
@@ -19,11 +20,11 @@ func ConvertObject(dst, src interface{}) (err error) {
 	dstType, dstValue := reflect.TypeOf(dst), reflect.ValueOf(dst)
 	srcType, srcValue := reflect.TypeOf(src), reflect.ValueOf(src)
 
-	if dstType.Kind() != reflect.Ptr || dstType.Elem().Kind() != reflect.Struct {
+	if dstType.Kind() != reflect.Pointer || dstType.Elem().Kind() != reflect.Struct {
 		return errors.New("dst type should be a struct pointer")
 	}
 
-	if srcType.Kind() == reflect.Ptr {
+	if srcType.Kind() == reflect.Pointer {
 		srcType, srcValue = srcType.Elem(), srcValue.Elem()
 	}
 	if srcType.Kind() != reflect.Struct {
@@ -34,7 +35,7 @@ func ConvertObject(dst, src interface{}) (err error) {
 
 	propertyNums := dstType.NumField()
 
-	for i := 0; i < propertyNums; i++ {
+	for i := range propertyNums {
 		property := dstType.Field(i)
 		propertyValue := srcValue.FieldByName(property.Name)
 		if !propertyValue.IsValid() || property.Type != propertyValue.Type() {
@@ -60,8 +61,8 @@ func ConvertList[T, S any](soure []*S) ([]*T, error) {
 	return resps, nil
 }
 
-func ConvertToMap(content interface{}) map[string]interface{} {
-	var name map[string]interface{}
+func ConvertToMap(content any) map[string]any {
+	var name map[string]any
 	if marshalContent, err := json.Marshal(content); err != nil {
 		log.Println(err)
 	} else {
@@ -70,9 +71,7 @@ func ConvertToMap(content interface{}) map[string]interface{} {
 		if err := d.Decode(&name); err != nil {
 			log.Println(err)
 		} else {
-			for k, v := range name {
-				name[k] = v
-			}
+			maps.Copy(name, name)
 		}
 	}
 	return name

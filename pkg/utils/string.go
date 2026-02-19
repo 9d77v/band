@@ -9,7 +9,7 @@ const characters = "abcdefghijklmnopqrstuvwxyz0123456789"
 
 func RandomString(n int) string {
 	p := make([]byte, n)
-	for i := 0; i < n; i++ {
+	for i := range n {
 		m, _ := rand.Int(rand.Reader, big.NewInt(36))
 		p[i] = characters[m.Int64()]
 	}

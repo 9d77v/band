@@ -35,7 +35,7 @@ func (j *JWT) CreateToken(id string) (string, error) {
 }
 
 func (j *JWT) ParserToken(tokenString string) (*CustomClaims, error) {
-	token, err := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
+	token, err := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (any, error) {
 		return []byte(j.Conf.SecretKey), nil
 	})
 

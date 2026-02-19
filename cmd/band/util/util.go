@@ -45,17 +45,17 @@ func UnderscoreToCamelCase(input string) string {
 
 	parts := strings.Split(input, "_")
 
-	var result string
+	var result strings.Builder
 
 	for _, part := range parts {
 
 		if len(part) > 0 {
 
-			result += strings.ToUpper(string(part[0])) + strings.ToLower(part[1:])
+			result.WriteString(strings.ToUpper(string(part[0])) + strings.ToLower(part[1:]))
 
 		}
 
 	}
 
-	return result
+	return result.String()
 }

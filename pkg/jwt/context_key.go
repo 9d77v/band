@@ -10,7 +10,7 @@ func NewContextKey(name string) ContextKey {
 	return ContextKey{name}
 }
 
-func (c ContextKey) Get(ctx context.Context) interface{} {
+func (c ContextKey) Get(ctx context.Context) any {
 	return ctx.Value(c)
 }
 
