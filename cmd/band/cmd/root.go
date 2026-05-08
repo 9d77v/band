@@ -43,4 +43,5 @@ func init() {
 	serviceCommand.Flags().StringVarP(&entity, "entity", "e", "", "entity name")
 	serviceCommand.Flags().StringVarP(&idType, "id_type", "t", "uint", "id type")
 	rootCmd.AddCommand(serviceCommand)
+	rootCmd.AddCommand(versionCommand)
 }
