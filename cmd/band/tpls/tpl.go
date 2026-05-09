@@ -10,3 +10,6 @@ var ServerFiles embed.FS
 
 //go:embed proto
 var ProtoFiles embed.FS
+
+//go:embed cmd
+var CmdFiles embed.FS

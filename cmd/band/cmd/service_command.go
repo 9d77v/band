@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"bufio"
 	"fmt"
 	"io/fs"
 	"log"
@@ -25,6 +26,7 @@ var serviceCommand = &cobra.Command{
 
 const (
 	serviceDir = "service"
+	cmdDir     = "cmd"
 )
 
 type ServiceTpl struct {
@@ -57,7 +59,7 @@ func addNewService() {
 		entity = service
 	}
 	serviceTpl := &ServiceTpl{
-		PKG_DIR:         pkgDir,
+		PKG_DIR:         getPkgDirFromGoMod(),
 		SERVICE_UPPER:   util.UnderscoreToCamelCase(service),
 		SERVICE_LOWER:   util.FirstLower(util.UnderscoreToCamelCase(service)),
 		SERVICE_PACKAGE: service,
@@ -76,9 +78,12 @@ func addNewService() {
 	fmt.Println("copy service files finished")
 	handleServiceProto(serviceTpl)
 	fmt.Println("generate service proto finished")
-	execCmd("make", `init-`+service)
-	fmt.Println("init service finished")
-	execCmd("make", `wire-`+service)
+	handleServiceCmd(serviceTpl)
+	fmt.Println("generate service cmd finished")
+	fmt.Println("start make init")
+	execCmd("make", "init")
+	fmt.Println("finish make init")
+	execCmd("make", "GOWORK=off", `wire-`+service)
 	fmt.Println("wire service finished")
 }
 
@@ -139,14 +144,12 @@ func handleServiceProto(tpl *ServiceTpl) {
 	--go_out=. \
 	--go-grpc_out=require_unimplemented_servers=false:. \
 	api/protobuf/` + service + `pb/*.proto
-init-` + service + `:
-	cd apps/` + service + ` && go mod init ` + pkgDir + `
-	go work use apps/` + service + `
-	cd apps/` + service + ` && go mod tidy
 wire-` + service + `:
-	cd apps/` + service + `/cmd/server && wire gen && mv wire.go wire.go.back
+	cd cmd/apps/` + service + `-service && wire gen && mv wire.go wire.go.back
+wire-` + service + `-clean:
+	cd cmd/apps/` + service + `-service && rm wire_gen.go && mv wire.go.back wire.go
 dev-` + service + `:
-	go run apps/` + service + `/cmd/server/*.go`); err != nil {
+	go run cmd/apps/` + service + `-service/*.go`); err != nil {
 		panic(err)
 	}
 	execCmd("make", `protoc-`+service)
@@ -166,4 +169,54 @@ func writeTplFile(tpl *ServiceTpl, fd []byte, fileName string) {
 	if err != nil {
 		log.Println("write file failed:", err)
 	}
+}
+
+func handleServiceCmd(tpl *ServiceTpl) {
+	cmdLocalDir := "./cmd/apps/" + service + "-service"
+	os.MkdirAll(cmdLocalDir, os.ModePerm)
+	dirs, err := tpls.CmdFiles.ReadDir(cmdDir + "/server")
+	if err != nil {
+		log.Println("open cmd directory failed:", err)
+	}
+	for _, v := range dirs {
+		name := v.Name()
+		serverPath := cmdDir + "/server/" + name
+		fd, err := tpls.CmdFiles.ReadFile(serverPath)
+		if err != nil {
+			log.Println("open", serverPath, "file failed:", err)
+		}
+		fileName := cmdLocalDir + "/" + strings.ReplaceAll(name, ".tpl", "")
+		tmpl, err := template.New("cmd").Parse(string(fd))
+		if err != nil {
+			log.Println("template parse failed:", err)
+		}
+		file, err := os.OpenFile(fileName, os.O_CREATE|os.O_WRONLY, 0755)
+		if err != nil {
+			log.Println("open file failed:", err)
+		}
+		defer file.Close()
+		err = tmpl.Execute(file, tpl)
+		if err != nil {
+			log.Println("write file failed:", err)
+		}
+	}
+}
+
+// getPkgDirFromGoMod 从项目根目录的 go.mod 文件中读取 module path
+func getPkgDirFromGoMod() string {
+	f, err := os.Open("go.mod")
+	if err != nil {
+		log.Fatalln("open go.mod failed:", err)
+	}
+	defer f.Close()
+
+	scanner := bufio.NewScanner(f)
+	for scanner.Scan() {
+		line := strings.TrimSpace(scanner.Text())
+		if strings.HasPrefix(line, "module ") {
+			return strings.TrimSpace(strings.TrimPrefix(line, "module "))
+		}
+	}
+	log.Fatalln("module path not found in go.mod")
+	return ""
 }

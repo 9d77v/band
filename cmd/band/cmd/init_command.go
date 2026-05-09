@@ -8,6 +8,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 	"text/template"
 
@@ -20,9 +21,15 @@ var initCommand = &cobra.Command{
 	Short: "init a web server",
 	Long:  `init a web server`,
 	Run: func(cmd *cobra.Command, args []string) {
+		if pkgDir == "" {
+			log.Fatalln("module path is required, use --pkg flag")
+		}
 		fmt.Println("start init project")
 		initProject()
+		fmt.Println("finish init project")
+		fmt.Println("start make init")
 		execCmd("make", "init")
+		fmt.Println("finish make init")
 		handleEnvFile()
 		fmt.Println("init project success")
 	},
@@ -31,18 +38,17 @@ var initCommand = &cobra.Command{
 func handleEnvFile() {
 	f, err := os.Open("env.sample")
 	if err != nil {
-		fmt.Println("err:", err)
-		return
+		log.Panicln("err:", err)
 	}
 	data, err := io.ReadAll(f)
 	if err != nil {
-		fmt.Println("err:", err)
+		log.Panicln("err:", err)
 		return
 	}
 	f.Close()
 	file, err := os.OpenFile(".env", os.O_CREATE|os.O_WRONLY, 0755)
 	if err != nil {
-		log.Println("打开文件失败", err)
+		log.Panicln("打开文件失败", err)
 	}
 	defer file.Close()
 	file.Write(data)
@@ -50,7 +56,25 @@ func handleEnvFile() {
 
 }
 func execCmd(name string, args ...string) {
-	goCmd := exec.Command(name, args...)
+	var envVars []string
+	var cmdArgs []string
+	
+	// Extract environment variables from arguments
+	for _, arg := range args {
+		if strings.Contains(arg, "=") && !strings.HasPrefix(arg, "-") {
+			envVars = append(envVars, arg)
+		} else {
+			cmdArgs = append(cmdArgs, arg)
+		}
+	}
+	
+	goCmd := exec.Command(name, cmdArgs...)
+	
+	// Set environment variables if any were provided
+	if len(envVars) > 0 {
+		goCmd.Env = append(os.Environ(), envVars...)
+	}
+	
 	var stdout, stderr bytes.Buffer
 	goCmd.Stdout = &stdout // 标准输出
 	goCmd.Stderr = &stderr // 标准错误
@@ -67,6 +91,7 @@ const (
 )
 
 type ServerTpl struct {
+	PKG_DIR  string
 	APP_NAME string
 }
 
@@ -74,46 +99,51 @@ type ServerTpl struct {
 func initProject() {
 	dirs, err := tpls.ServerFiles.ReadDir(serverDir)
 	if err != nil {
-		log.Println("打开server文件夹失败", err)
+		log.Panicln("打开server文件夹失败", err)
 	}
 	serverTpl := &ServerTpl{
-		APP_NAME: "",
+		PKG_DIR:  pkgDir,
+		APP_NAME: appName,
 	}
-	walkServerDir(serverTpl, "./", serverDir, dirs)
+	walkServerDir(serverTpl, ".", serverDir, dirs)
 }
 
-func walkServerDir(tpl *ServerTpl, localDir, serverDir string, dirs []fs.DirEntry) {
+func walkServerDir(tpl *ServerTpl, localDir, parentServerDir string, dirs []fs.DirEntry) {
 	for _, v := range dirs {
 		name := v.Name()
-		serverPath := serverDir + "/" + name
+		serverPath := filepath.Join(parentServerDir, name)
+		localPath := filepath.Join(localDir, name)
 		fmt.Println(serverPath)
-		localPath := localDir + "/" + strings.Replace(name, "example", service, -1)
+
 		if v.IsDir() {
-			dirs, err := tpls.ServerFiles.ReadDir(serverPath)
+			childDirs, err := tpls.ServerFiles.ReadDir(serverPath)
 			if err != nil {
-				log.Println("打开", serverPath, "文件夹失败", err)
+				log.Panicln("打开", serverPath, "文件夹失败", err)
 			}
-			os.MkdirAll(localPath, os.ModePerm)
-			walkServerDir(tpl, localPath, serverPath, dirs)
+			err = os.MkdirAll(localPath, os.ModePerm)
+			if err != nil {
+				log.Panicln("创建目录失败", err)
+			}
+			walkServerDir(tpl, localPath, serverPath, childDirs)
 		} else {
 			fd, err := tpls.ServerFiles.ReadFile(serverPath)
 			if err != nil {
-				log.Println("打开", serverPath, "文件失败", err)
+				log.Panicln("打开", serverPath, "文件失败", err)
 			}
 			fileName := strings.ReplaceAll(localPath, ".tpl", "")
 			tmpl, err := template.New("server").Parse(string(fd))
 			if err != nil {
-				log.Println("模版解析失败", err)
+				log.Panicln("模版解析失败", err)
 			}
 			file, err := os.OpenFile(fileName, os.O_CREATE|os.O_WRONLY, 0755)
 			if err != nil {
-				log.Println("打开文件失败", err)
+				log.Panicln("打开文件失败", err)
 			}
-			defer file.Close()
 			err = tmpl.Execute(file, tpl)
 			if err != nil {
-				log.Println("写文件失败", err)
+				log.Panicln("写文件失败", err)
 			}
+			file.Close()
 		}
 	}
 }
