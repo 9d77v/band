@@ -133,26 +133,33 @@ func handleServiceProto(tpl *ServiceTpl) {
 	}
 	fileName := protoDir + "/" + service + ".proto"
 	writeTplFile(tpl, fd, fileName)
-	file, err := os.OpenFile("Makefile", os.O_APPEND|os.O_WRONLY, 0600)
-	if err != nil {
-		panic(err)
-	}
-	defer file.Close()
-
-	if _, err = file.WriteString(`protoc-` + service + `: api/protobuf/` + service + `pb/*.proto
-	protoc -I./api/protobuf/` + service + `pb \
-	--go_out=. \
-	--go-grpc_out=require_unimplemented_servers=false:. \
-	api/protobuf/` + service + `pb/*.proto
-wire-` + service + `:
-	cd cmd/apps/` + service + `-service && wire gen && mv wire.go wire.go.back
-wire-` + service + `-clean:
-	cd cmd/apps/` + service + `-service && rm wire_gen.go && mv wire.go.back wire.go
-dev-` + service + `:
-	go run cmd/apps/` + service + `-service/*.go`); err != nil {
-		panic(err)
-	}
+	updateMakefileServices(service)
 	execCmd("make", `protoc-`+service)
+}
+
+func updateMakefileServices(serviceName string) {
+	data, err := os.ReadFile("Makefile")
+	if err != nil {
+		log.Println("read Makefile failed:", err)
+		return
+	}
+
+	content := string(data)
+	servicesLine := "SERVICES := "
+
+	if !strings.Contains(content, servicesLine) {
+		log.Println("SERVICES configuration not found in Makefile")
+		return
+	}
+
+	// 在 "SERVICES := " 行后面添加 service 名称
+	content = strings.Replace(content, servicesLine, servicesLine+serviceName+" ", 1)
+
+	err = os.WriteFile("Makefile", []byte(content), 0600)
+	if err != nil {
+		log.Println("write Makefile failed:", err)
+		return
+	}
 }
 
 func writeTplFile(tpl *ServiceTpl, fd []byte, fileName string) {
