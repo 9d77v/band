@@ -10,7 +10,7 @@ init:
 fix:
 	go fix ./...
 migrate:
-	go run tools/migration/main.go
+	go run tools/migrator/*.go
 gosec:
 	gosec -conf gosec.json ./...
 docker:

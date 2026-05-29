@@ -2,11 +2,12 @@ package log
 
 import (
 	"fmt"
-	"io"
 	"os"
+	"time"
 
 	"log/slog"
 
+	"github.com/lmittmann/tint"
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
@@ -31,14 +32,22 @@ func Init() {
 		LocalTime:  true,
 		Compress:   false, // disabled by default
 	}
-	writers := []io.Writer{writer}
-	if conf.Level == LevelDebug {
-		writers = append(writers, os.Stdout)
-	}
-	fileAndStdoutWriter := io.MultiWriter(writers...)
-	Logger = slog.New(slog.NewJSONHandler(fileAndStdoutWriter, &slog.HandlerOptions{
+	// 文件日志使用 JSON 格式
+	fileHandler := slog.NewJSONHandler(writer, &slog.HandlerOptions{
 		Level: level,
-	}))
+	})
+
+	if conf.Level == LevelDebug {
+		// 控制台使用带颜色的 Text 格式
+		consoleHandler := tint.NewHandler(os.Stdout, &tint.Options{
+			Level:      level,
+			TimeFormat: time.TimeOnly,
+			AddSource:  false,
+		})
+		Logger = slog.New(slog.NewMultiHandler(consoleHandler, fileHandler))
+	} else {
+		Logger = slog.New(fileHandler)
+	}
 	slog.SetDefault(Logger)
 	slog.Info("log init success")
 }

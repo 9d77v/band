@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/9d77v/band/pkg/stores/orm"
@@ -10,21 +9,24 @@ import (
 )
 
 func main() {
+	db := initDB()
+	migrateEnumTypes(db)
+	migrateSchemas(db)
+	seedProducts(db)
+	seedPrompts(db)
+}
+
+// initDB 初始化数据库连接
+func initDB() *postgres.PgDB {
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatalf("Some error occured. Err: %s", err)
+		log.Fatalf("加载环境变量失败: %s", err)
 	}
 	conf := orm.FromEnv()
-	fmt.Println(conf)
 	postgres.CreateDatabaseIfNotExist(conf)
 	db, err := postgres.NewPgDB(conf)
 	if err != nil {
-		panic("new db connection failed")
+		log.Fatalf("数据库连接失败: %s", err)
 	}
-	err = db.GetDB().AutoMigrate(
-	//TODO
-	)
-	if err != nil {
-		log.Println("auto migrate error:", err)
-	}
+	return db
 }

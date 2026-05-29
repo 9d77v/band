@@ -21,6 +21,8 @@ require (
 	gorm.io/gorm v1.31.1
 )
 
+require github.com/lmittmann/tint v1.1.3
+
 require (
 	github.com/alibabacloud-go/alibabacloud-gateway-spi v0.0.5 // indirect
 	github.com/alibabacloud-go/debug v1.0.1 // indirect
