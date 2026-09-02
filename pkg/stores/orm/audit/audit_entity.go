@@ -1,9 +1,10 @@
 package audit
 
 import (
+	"uuid"
+
 	"github.com/9d77v/band/pkg/jwt"
 	"github.com/9d77v/band/pkg/stores/orm/base"
-	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
