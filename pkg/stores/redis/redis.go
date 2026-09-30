@@ -19,6 +19,411 @@ type Redis struct {
 	conf   Conf
 }
 
+// ACLUsers implements [redis.Cmdable].
+func (r *Redis) ACLUsers(ctx context.Context) *redis.StringSliceCmd {
+	return r.client.ACLUsers(ctx)
+}
+
+// ACLWhoAmI implements [redis.Cmdable].
+func (r *Redis) ACLWhoAmI(ctx context.Context) *redis.StringCmd {
+	return r.client.ACLWhoAmI(ctx)
+}
+
+// ARCount implements [redis.Cmdable].
+func (r *Redis) ARCount(ctx context.Context, key string) *redis.UintCmd {
+	return r.client.ARCount(ctx, key)
+}
+
+// ARDel implements [redis.Cmdable].
+func (r *Redis) ARDel(ctx context.Context, key string, indexes ...uint64) *redis.IntCmd {
+	return r.client.ARDel(ctx, key, indexes...)
+}
+
+// ARDelRange implements [redis.Cmdable].
+func (r *Redis) ARDelRange(ctx context.Context, key string, ranges ...redis.ARRange) *redis.UintCmd {
+	return r.client.ARDelRange(ctx, key, ranges...)
+}
+
+// ARGet implements [redis.Cmdable].
+func (r *Redis) ARGet(ctx context.Context, key string, index uint64) *redis.StringCmd {
+	return r.client.ARGet(ctx, key, index)
+}
+
+// ARGetRange implements [redis.Cmdable].
+func (r *Redis) ARGetRange(ctx context.Context, key string, start uint64, end uint64) *redis.SliceCmd {
+	return r.client.ARGetRange(ctx, key, start, end)
+}
+
+// ARGrep implements [redis.Cmdable].
+func (r *Redis) ARGrep(ctx context.Context, key string, start string, end string, args *redis.ARGrepArgs) *redis.UintSliceCmd {
+	return r.client.ARGrep(ctx, key, start, end, args)
+}
+
+// ARGrepWithValues implements [redis.Cmdable].
+func (r *Redis) ARGrepWithValues(ctx context.Context, key string, start string, end string, args *redis.ARGrepArgs) *redis.AREntrySliceCmd {
+	return r.client.ARGrepWithValues(ctx, key, start, end, args)
+}
+
+// ARInfo implements [redis.Cmdable].
+func (r *Redis) ARInfo(ctx context.Context, key string) *redis.MapStringInterfaceCmd {
+	return r.client.ARInfo(ctx, key)
+}
+
+// ARInfoFull implements [redis.Cmdable].
+func (r *Redis) ARInfoFull(ctx context.Context, key string) *redis.MapStringInterfaceCmd {
+	return r.client.ARInfoFull(ctx, key)
+}
+
+// ARInsert implements [redis.Cmdable].
+func (r *Redis) ARInsert(ctx context.Context, key string, values ...string) *redis.UintCmd {
+	return r.client.ARInsert(ctx, key, values...)
+}
+
+// ARLastItems implements [redis.Cmdable].
+func (r *Redis) ARLastItems(ctx context.Context, key string, count uint64, rev bool) *redis.SliceCmd {
+	return r.client.ARLastItems(ctx, key, count, rev)
+}
+
+// ARLen implements [redis.Cmdable].
+func (r *Redis) ARLen(ctx context.Context, key string) *redis.UintCmd {
+	return r.client.ARLen(ctx, key)
+}
+
+// ARMGet implements [redis.Cmdable].
+func (r *Redis) ARMGet(ctx context.Context, key string, indexes ...uint64) *redis.SliceCmd {
+	return r.client.ARMGet(ctx, key, indexes...)
+}
+
+// ARMSet implements [redis.Cmdable].
+func (r *Redis) ARMSet(ctx context.Context, key string, members ...redis.AREntry) *redis.IntCmd {
+	return r.client.ARMSet(ctx, key, members...)
+}
+
+// ARNext implements [redis.Cmdable].
+func (r *Redis) ARNext(ctx context.Context, key string) *redis.UintCmd {
+	return r.client.ARNext(ctx, key)
+}
+
+// AROpAnd implements [redis.Cmdable].
+func (r *Redis) AROpAnd(ctx context.Context, key string, start uint64, end uint64) *redis.IntCmd {
+	return r.client.AROpAnd(ctx, key, start, end)
+}
+
+// AROpMatch implements [redis.Cmdable].
+func (r *Redis) AROpMatch(ctx context.Context, key string, start uint64, end uint64, value string) *redis.IntCmd {
+	return r.client.AROpMatch(ctx, key, start, end, value)
+}
+
+// AROpMax implements [redis.Cmdable].
+func (r *Redis) AROpMax(ctx context.Context, key string, start uint64, end uint64) *redis.StringCmd {
+	return r.client.AROpMax(ctx, key, start, end)
+}
+
+// AROpMin implements [redis.Cmdable].
+func (r *Redis) AROpMin(ctx context.Context, key string, start uint64, end uint64) *redis.StringCmd {
+	return r.client.AROpMin(ctx, key, start, end)
+}
+
+// AROpOr implements [redis.Cmdable].
+func (r *Redis) AROpOr(ctx context.Context, key string, start uint64, end uint64) *redis.IntCmd {
+	return r.client.AROpOr(ctx, key, start, end)
+}
+
+// AROpSum implements [redis.Cmdable].
+func (r *Redis) AROpSum(ctx context.Context, key string, start uint64, end uint64) *redis.StringCmd {
+	return r.client.AROpSum(ctx, key, start, end)
+}
+
+// AROpUsed implements [redis.Cmdable].
+func (r *Redis) AROpUsed(ctx context.Context, key string, start uint64, end uint64) *redis.IntCmd {
+	return r.client.AROpUsed(ctx, key, start, end)
+}
+
+// AROpXor implements [redis.Cmdable].
+func (r *Redis) AROpXor(ctx context.Context, key string, start uint64, end uint64) *redis.IntCmd {
+	return r.client.AROpXor(ctx, key, start, end)
+}
+
+// ARRing implements [redis.Cmdable].
+func (r *Redis) ARRing(ctx context.Context, key string, size uint64, values ...string) *redis.UintCmd {
+	return r.client.ARRing(ctx, key, size, values...)
+}
+
+// ARScan implements [redis.Cmdable].
+func (r *Redis) ARScan(ctx context.Context, key string, start uint64, end uint64, args *redis.ARScanArgs) *redis.AREntrySliceCmd {
+	return r.client.ARScan(ctx, key, start, end, args)
+}
+
+// ARSeek implements [redis.Cmdable].
+func (r *Redis) ARSeek(ctx context.Context, key string, index uint64) *redis.IntCmd {
+	return r.client.ARSeek(ctx, key, index)
+}
+
+// ARSet implements [redis.Cmdable].
+func (r *Redis) ARSet(ctx context.Context, key string, index uint64, values ...string) *redis.IntCmd {
+	return r.client.ARSet(ctx, key, index, values...)
+}
+
+// BLMoveM implements [redis.Cmdable].
+func (r *Redis) BLMoveM(ctx context.Context, source string, destination string, srcpos string, destpos string, timeout time.Duration, args redis.LMoveMArgs) *redis.StringSliceCmd {
+	return r.client.BLMoveM(ctx, source, destination, srcpos, destpos, timeout, args)
+}
+
+// ClientMaintNotifications implements [redis.Cmdable].
+func (r *Redis) ClientMaintNotifications(ctx context.Context, enabled bool, endpointType string) *redis.StatusCmd {
+	return r.client.ClientMaintNotifications(ctx, enabled, endpointType)
+}
+
+// ClientTracking implements [redis.Cmdable].
+func (r *Redis) ClientTracking(ctx context.Context, on bool, opt *redis.ClientTrackingOptions) *redis.StatusCmd {
+	return r.client.ClientTracking(ctx, on, opt)
+}
+
+// ClientTrackingOff implements [redis.Cmdable].
+func (r *Redis) ClientTrackingOff(ctx context.Context) *redis.StatusCmd {
+	return r.client.ClientTrackingOff(ctx)
+}
+
+// ClientTrackingOn implements [redis.Cmdable].
+func (r *Redis) ClientTrackingOn(ctx context.Context, opt *redis.ClientTrackingOptions) *redis.StatusCmd {
+	return r.client.ClientTrackingOn(ctx, opt)
+}
+
+// DelExArgs implements [redis.Cmdable].
+func (r *Redis) DelExArgs(ctx context.Context, key string, a redis.DelExArgs) *redis.IntCmd {
+	return r.client.DelExArgs(ctx, key, a)
+}
+
+// Digest implements [redis.Cmdable].
+func (r *Redis) Digest(ctx context.Context, key string) *redis.DigestCmd {
+	return r.client.Digest(ctx, key)
+}
+
+// FTAliasList implements [redis.Cmdable].
+func (r *Redis) FTAliasList(ctx context.Context, index string) *redis.StringSliceCmd {
+	return r.client.FTAliasList(ctx, index)
+}
+
+// FTHybrid implements [redis.Cmdable].
+func (r *Redis) FTHybrid(ctx context.Context, index string, searchExpr string, vectorField string, vectorData redis.Vector) *redis.FTHybridCmd {
+	return r.client.FTHybrid(ctx, index, searchExpr, vectorField, vectorData)
+}
+
+// FTHybridWithArgs implements [redis.Cmdable].
+func (r *Redis) FTHybridWithArgs(ctx context.Context, index string, options *redis.FTHybridOptions) *redis.FTHybridCmd {
+	return r.client.FTHybridWithArgs(ctx, index, options)
+}
+
+// GetToBuffer implements [redis.Cmdable].
+func (r *Redis) GetToBuffer(ctx context.Context, key string, buf []byte) *redis.ZeroCopyStringCmd {
+	return r.client.GetToBuffer(ctx, key, buf)
+}
+
+// HImportDiscard implements [redis.Cmdable].
+func (r *Redis) HImportDiscard(ctx context.Context, fieldsetName string) *redis.IntCmd {
+	return r.client.HImportDiscard(ctx, fieldsetName)
+}
+
+// HImportDiscardAll implements [redis.Cmdable].
+func (r *Redis) HImportDiscardAll(ctx context.Context) *redis.IntCmd {
+	return r.client.HImportDiscardAll(ctx)
+}
+
+// HImportPrepare implements [redis.Cmdable].
+func (r *Redis) HImportPrepare(ctx context.Context, fieldsetName string, fields ...string) *redis.StatusCmd {
+	return r.client.HImportPrepare(ctx, fieldsetName, fields...)
+}
+
+// HImportSet implements [redis.Cmdable].
+func (r *Redis) HImportSet(ctx context.Context, key string, fieldsetName string, values ...interface{}) *redis.StatusCmd {
+	return r.client.HImportSet(ctx, key, fieldsetName, values...)
+}
+
+// IncrEXFloat implements [redis.Cmdable].
+func (r *Redis) IncrEXFloat(ctx context.Context, key string, args redis.IncrEXFloatArgs) *redis.IncrEXFloatCmd {
+	return r.client.IncrEXFloat(ctx, key, args)
+}
+
+// IncrEXInt implements [redis.Cmdable].
+func (r *Redis) IncrEXInt(ctx context.Context, key string, args redis.IncrEXIntArgs) *redis.IncrEXIntCmd {
+	return r.client.IncrEXInt(ctx, key, args)
+}
+
+// InfoMap implements [redis.Cmdable].
+func (r *Redis) InfoMap(ctx context.Context, section ...string) *redis.InfoCmd {
+	return r.client.InfoMap(ctx, section...)
+}
+
+// JSONSetWithArgs implements [redis.Cmdable].
+func (r *Redis) JSONSetWithArgs(ctx context.Context, key string, path string, value interface{}, options *redis.JSONSetArgsOptions) *redis.StatusCmd {
+	return r.client.JSONSetWithArgs(ctx, key, path, value, options)
+}
+
+// LMoveM implements [redis.Cmdable].
+func (r *Redis) LMoveM(ctx context.Context, source string, destination string, srcpos string, destpos string, args redis.LMoveMArgs) *redis.StringSliceCmd {
+	return r.client.LMoveM(ctx, source, destination, srcpos, destpos, args)
+}
+
+// Latency implements [redis.Cmdable].
+func (r *Redis) Latency(ctx context.Context) *redis.LatencyCmd {
+	return r.client.Latency(ctx)
+}
+
+// LatencyReset implements [redis.Cmdable].
+func (r *Redis) LatencyReset(ctx context.Context, events ...interface{}) *redis.StatusCmd {
+	return r.client.LatencyReset(ctx, events...)
+}
+
+// MSetEX implements [redis.Cmdable].
+func (r *Redis) MSetEX(ctx context.Context, args redis.MSetEXArgs, values ...interface{}) *redis.IntCmd {
+	return r.client.MSetEX(ctx, args, values...)
+}
+
+// ReplicaOf implements [redis.Cmdable].
+func (r *Redis) ReplicaOf(ctx context.Context, host string, port string) *redis.StatusCmd {
+	return r.client.ReplicaOf(ctx, host, port)
+}
+
+// SDiffCard implements [redis.Cmdable].
+func (r *Redis) SDiffCard(ctx context.Context, opts *redis.SDiffCardOptions, keys ...string) *redis.IntCmd {
+	return r.client.SDiffCard(ctx, opts, keys...)
+}
+
+// SUnionCard implements [redis.Cmdable].
+func (r *Redis) SUnionCard(ctx context.Context, opts *redis.SUnionCardOptions, keys ...string) *redis.IntCmd {
+	return r.client.SUnionCard(ctx, opts, keys...)
+}
+
+// SetFromBuffer implements [redis.Cmdable].
+func (r *Redis) SetFromBuffer(ctx context.Context, key string, buf []byte) *redis.StatusCmd {
+	return r.client.SetFromBuffer(ctx, key, buf)
+}
+
+// SetIFDEQ implements [redis.Cmdable].
+func (r *Redis) SetIFDEQ(ctx context.Context, key string, value interface{}, matchDigest uint64, expiration time.Duration) *redis.StatusCmd {
+	return r.client.SetIFDEQ(ctx, key, value, matchDigest, expiration)
+}
+
+// SetIFDEQGet implements [redis.Cmdable].
+func (r *Redis) SetIFDEQGet(ctx context.Context, key string, value interface{}, matchDigest uint64, expiration time.Duration) *redis.StringCmd {
+	return r.client.SetIFDEQGet(ctx, key, value, matchDigest, expiration)
+}
+
+// SetIFDNE implements [redis.Cmdable].
+func (r *Redis) SetIFDNE(ctx context.Context, key string, value interface{}, matchDigest uint64, expiration time.Duration) *redis.StatusCmd {
+	return r.client.SetIFDNE(ctx, key, value, matchDigest, expiration)
+}
+
+// SetIFDNEGet implements [redis.Cmdable].
+func (r *Redis) SetIFDNEGet(ctx context.Context, key string, value interface{}, matchDigest uint64, expiration time.Duration) *redis.StringCmd {
+	return r.client.SetIFDNEGet(ctx, key, value, matchDigest, expiration)
+}
+
+// SetIFEQ implements [redis.Cmdable].
+func (r *Redis) SetIFEQ(ctx context.Context, key string, value interface{}, matchValue interface{}, expiration time.Duration) *redis.StatusCmd {
+	return r.client.SetIFEQ(ctx, key, value, matchValue, expiration)
+}
+
+// SetIFEQGet implements [redis.Cmdable].
+func (r *Redis) SetIFEQGet(ctx context.Context, key string, value interface{}, matchValue interface{}, expiration time.Duration) *redis.StringCmd {
+	return r.client.SetIFEQGet(ctx, key, value, matchValue, expiration)
+}
+
+// SetIFNE implements [redis.Cmdable].
+func (r *Redis) SetIFNE(ctx context.Context, key string, value interface{}, matchValue interface{}, expiration time.Duration) *redis.StatusCmd {
+	return r.client.SetIFNE(ctx, key, value, matchValue, expiration)
+}
+
+// SetIFNEGet implements [redis.Cmdable].
+func (r *Redis) SetIFNEGet(ctx context.Context, key string, value interface{}, matchValue interface{}, expiration time.Duration) *redis.StringCmd {
+	return r.client.SetIFNEGet(ctx, key, value, matchValue, expiration)
+}
+
+// SlowLogLen implements [redis.Cmdable].
+func (r *Redis) SlowLogLen(ctx context.Context) *redis.IntCmd {
+	return r.client.SlowLogLen(ctx)
+}
+
+// SlowLogReset implements [redis.Cmdable].
+func (r *Redis) SlowLogReset(ctx context.Context) *redis.StatusCmd {
+	return r.client.SlowLogReset(ctx)
+}
+
+// TSNRange implements [redis.Cmdable].
+func (r *Redis) TSNRange(ctx context.Context, keys []string, fromTimestamp interface{}, toTimestamp interface{}) *redis.TSNRangePivotRowSliceCmd {
+	return r.client.TSNRange(ctx, keys, fromTimestamp, toTimestamp)
+}
+
+// TSNRangeWithArgs implements [redis.Cmdable].
+func (r *Redis) TSNRangeWithArgs(ctx context.Context, keys []string, fromTimestamp interface{}, toTimestamp interface{}, options *redis.TSNRangeOptions) *redis.TSNRangePivotRowSliceCmd {
+	return r.client.TSNRangeWithArgs(ctx, keys, fromTimestamp, toTimestamp, options)
+}
+
+// TSNRevRange implements [redis.Cmdable].
+func (r *Redis) TSNRevRange(ctx context.Context, keys []string, fromTimestamp interface{}, toTimestamp interface{}) *redis.TSNRangePivotRowSliceCmd {
+	return r.client.TSNRevRange(ctx, keys, fromTimestamp, toTimestamp)
+}
+
+// TSNRevRangeWithArgs implements [redis.Cmdable].
+func (r *Redis) TSNRevRangeWithArgs(ctx context.Context, keys []string, fromTimestamp interface{}, toTimestamp interface{}, options *redis.TSNRevRangeOptions) *redis.TSNRangePivotRowSliceCmd {
+	return r.client.TSNRevRangeWithArgs(ctx, keys, fromTimestamp, toTimestamp, options)
+}
+
+// TSQueryLabelValues implements [redis.Cmdable].
+func (r *Redis) TSQueryLabelValues(ctx context.Context, label string, filterExpr []string) *redis.StringSliceCmd {
+	return r.client.TSQueryLabelValues(ctx, label, filterExpr)
+}
+
+// TSQueryLabels implements [redis.Cmdable].
+func (r *Redis) TSQueryLabels(ctx context.Context, filterExpr []string) *redis.StringSliceCmd {
+	return r.client.TSQueryLabels(ctx, filterExpr)
+}
+
+// TSRead implements [redis.Cmdable].
+func (r *Redis) TSRead(ctx context.Context, key string, timestamp interface{}) *redis.TSTimestampValueSliceCmd {
+	return r.client.TSRead(ctx, key, timestamp)
+}
+
+// TSReadWithArgs implements [redis.Cmdable].
+func (r *Redis) TSReadWithArgs(ctx context.Context, key string, timestamp interface{}, options *redis.TSReadOptions) *redis.TSTimestampValueSliceCmd {
+	return r.client.TSReadWithArgs(ctx, key, timestamp, options)
+}
+
+// VIsMember implements [redis.Cmdable].
+func (r *Redis) VIsMember(ctx context.Context, key string, element string) *redis.BoolCmd {
+	return r.client.VIsMember(ctx, key, element)
+}
+
+// VRange implements [redis.Cmdable].
+func (r *Redis) VRange(ctx context.Context, key string, start string, end string, count int64) *redis.StringSliceCmd {
+	return r.client.VRange(ctx, key, start, end, count)
+}
+
+// VSimWithArgsWithAttribs implements [redis.Cmdable].
+func (r *Redis) VSimWithArgsWithAttribs(ctx context.Context, key string, val redis.Vector, args *redis.VSimArgs) *redis.VectorAttribSliceCmd {
+	return r.client.VSimWithArgsWithAttribs(ctx, key, val, args)
+}
+
+// VSimWithArgsWithScoresWithAttribs implements [redis.Cmdable].
+func (r *Redis) VSimWithArgsWithScoresWithAttribs(ctx context.Context, key string, val redis.Vector, args *redis.VSimArgs) *redis.VectorScoreAttribSliceCmd {
+	return r.client.VSimWithArgsWithScoresWithAttribs(ctx, key, val, args)
+}
+
+// XAutoClaimWithDeleted implements [redis.Cmdable].
+func (r *Redis) XAutoClaimWithDeleted(ctx context.Context, a *redis.XAutoClaimArgs) *redis.XAutoClaimWithDeletedCmd {
+	return r.client.XAutoClaimWithDeleted(ctx, a)
+}
+
+// XCfgSet implements [redis.Cmdable].
+func (r *Redis) XCfgSet(ctx context.Context, a *redis.XCfgSetArgs) *redis.StatusCmd {
+	return r.client.XCfgSet(ctx, a)
+}
+
+// XNack implements [redis.Cmdable].
+func (r *Redis) XNack(ctx context.Context, a *redis.XNackArgs) *redis.IntCmd {
+	return r.client.XNack(ctx, a)
+}
+
 func NewRedis(conf Conf) (*Redis, error) {
 	client := redis.NewUniversalClient(&redis.UniversalOptions{
 		Addrs:    conf.Addrs,
@@ -379,6 +784,11 @@ var _ redis.Cmdable = &Redis{}
 // ACLDryRun implements redis.Cmdable
 func (r *Redis) ACLDryRun(ctx context.Context, username string, command ...any) *redis.StringCmd {
 	return r.client.ACLDryRun(ctx, username, command...)
+}
+
+// ACLGenPass implements redis.Cmdable
+func (r *Redis) ACLGenPass(ctx context.Context, bit int) *redis.StringCmd {
+	return r.client.ACLGenPass(ctx, bit)
 }
 
 // BLMPop implements redis.Cmdable
@@ -1460,7 +1870,7 @@ func (r *Redis) ZRank(ctx context.Context, key, member string) *redis.IntCmd {
 }
 
 func (r *Redis) ZRem(ctx context.Context, key string, members ...any) *redis.IntCmd {
-	return r.client.ZRem(ctx, key, members)
+	return r.client.ZRem(ctx, key, members...)
 }
 
 func (r *Redis) ZRemRangeByRank(ctx context.Context, key string, start, stop int64) *redis.IntCmd {
@@ -2456,12 +2866,12 @@ func (r *Redis) VInfo(ctx context.Context, key string) *redis.MapStringInterface
 }
 
 // VLinks implements redis.Cmdable.
-func (r *Redis) VLinks(ctx context.Context, key string, element string) *redis.StringSliceCmd {
+func (r *Redis) VLinks(ctx context.Context, key string, element string) *redis.StringSliceSliceCmd {
 	return r.client.VLinks(ctx, key, element)
 }
 
 // VLinksWithScores implements redis.Cmdable.
-func (r *Redis) VLinksWithScores(ctx context.Context, key string, element string) *redis.VectorScoreSliceCmd {
+func (r *Redis) VLinksWithScores(ctx context.Context, key string, element string) *redis.VectorScoreSliceSliceCmd {
 	return r.client.VLinksWithScores(ctx, key, element)
 }
 
